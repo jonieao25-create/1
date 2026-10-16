@@ -774,25 +774,49 @@
   var backdrop = document.getElementById('modalBackdrop');
   var modalBody = document.getElementById('modalBody');
 
+  var MANAGER = 'Evgeniy_Rieltor_KLD';   // личный аккаунт риелтора
+
+  function roomLabel(c){
+    var key = activeTab[c.id];
+    var r = c.rooms.filter(function(x){ return x.key === key; })[0];
+    return r ? r.label : '';
+  }
+
+  // собирает текст заявки, который клиент отправит одним нажатием
+  function leadText(c, name, phone){
+    var t = 'Здравствуйте! Интересует ' + c.name;
+    var room = roomLabel(c);
+    if (room) t += ', ' + room.toLowerCase().replace(/\.$/, '');
+    t += '.';
+    if (name)  t += '\nМеня зовут ' + name + '.';
+    if (phone) t += '\nТелефон: ' + phone;
+    return t;
+  }
+
+  function openManagerChat(text){
+    var url = 'https://t.me/' + MANAGER + '?text=' + encodeURIComponent(text);
+    if (TG && TG.openTelegramLink) TG.openTelegramLink(url);
+    else window.open(url, '_blank');
+  }
+
   function openLeadForm(){
     var c = byId[ctaBar.dataset.zhk];
     modalBody.innerHTML =
       '<h3>Заявка на '+c.name+'</h3>'
-      + '<p>Оставьте телефон — менеджер свяжется и подберёт квартиру с учётом ваших пожеланий.</p>'
+      + '<p>Заполните, и откроется чат с риелтором — текст уже будет набран, останется отправить.</p>'
       + '<div class="field"><label for="leadName">Имя</label><input id="leadName" type="text" placeholder="Как к вам обращаться" autocomplete="name"></div>'
-      + '<div class="field"><label for="leadPhone">Телефон</label><input id="leadPhone" type="tel" placeholder="+7 ___ ___-__-__" autocomplete="tel"></div>'
+      + '<div class="field"><label for="leadPhone">Телефон <span style="font-weight:400;opacity:.7">— по желанию</span></label><input id="leadPhone" type="tel" placeholder="+7 ___ ___-__-__" autocomplete="tel"></div>'
       + '<div class="modal-actions">'
         + '<button class="btn-ghost" id="leadCancel" type="button">Отмена</button>'
-        + '<button class="btn-primary" id="leadSubmit" type="button">Отправить</button>'
+        + '<button class="btn-primary" id="leadSubmit" type="button">Написать риелтору</button>'
       + '</div>';
     backdrop.hidden = false;
     document.getElementById('leadCancel').addEventListener('click', closeModal);
     document.getElementById('leadSubmit').addEventListener('click', function(){
+      var name  = document.getElementById('leadName').value.trim();
       var phone = document.getElementById('leadPhone').value.trim();
-      if (!phone){
-        document.getElementById('leadPhone').focus();
-        return;
-      }
+      if (TG && TG.HapticFeedback) { try { TG.HapticFeedback.notificationOccurred('success'); } catch(e){} }
+      openManagerChat(leadText(c, name, phone));
       showThanks(c);
     });
   }
@@ -801,8 +825,8 @@
     modalBody.innerHTML =
       '<div class="ok-state">'
         + '<svg width="40" height="40" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M8 12.5l2.5 2.5L16 9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-        + '<h3>Заявка принята</h3>'
-        + '<p>Мы свяжемся с вами по поводу «'+c.name+'» в ближайшее время.</p>'
+        + '<h3>Почти готово</h3>'
+        + '<p>Открылся чат с риелтором, текст про «'+c.name+'» уже набран — просто нажмите «Отправить».</p>'
         + '<button class="btn-primary" type="button" id="leadClose" style="margin-top:6px;width:100%;padding:12px;border-radius:11px;font-weight:700;cursor:pointer;font-family:inherit;border:1px solid var(--accent)">Готово</button>'
       + '</div>';
     document.getElementById('leadClose').addEventListener('click', closeModal);
