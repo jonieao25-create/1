@@ -127,6 +127,9 @@
     background:var(--accent); color:var(--accent-ink);
   }
   .class-badge.econom{background:var(--badge-econom-soft); color:var(--badge-econom)}
+  /* плашка класса — в левом верхнем углу фотографии */
+  .card-art .class-badge{position:absolute; top:10px; left:10px; z-index:2}
+  .hero .class-badge{position:absolute; top:12px; left:12px; z-index:5}
   .card-body{padding:14px 14px 16px; display:flex; flex-direction:column; gap:6px}
   .card-title{font-size:17px; font-weight:700}
   .card-addr{font-size:12.5px; color:var(--fg-muted); display:flex; align-items:center; gap:5px}
@@ -663,7 +666,7 @@
       '<h3>Заявка на '+c.name+'</h3>'
       + '<p>Заполните, и откроется чат с риелтором — текст уже будет набран, останется отправить.</p>'
       + '<div class="field"><label for="leadName">Имя</label><input id="leadName" type="text" placeholder="Как к вам обращаться" autocomplete="name"></div>'
-      + '<div class="field"><label for="leadPhone">Телефон <span style="font-weight:400;opacity:.7">— по желанию</span></label>'
+      + '<div class="field"><label for="leadPhone">Телефон</label>'
         + '<div class="phone-wrap"><span class="phone-prefix">+7</span>'
         + '<input id="leadPhone" type="tel" inputmode="numeric" maxlength="15" placeholder="924 123-45-67" autocomplete="tel"></div></div>'
       + '<div class="modal-actions">'
