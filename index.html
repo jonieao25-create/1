@@ -95,7 +95,7 @@
   /* ---- Home ---- */
   .home-head{padding:18px 0 6px}
   .home-head .eyebrow{font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); font-weight:700}
-  .home-head h1{font-size:26px; margin-top:6px; line-height:1.15}
+  .home-head h1{font-size:clamp(21px, 6.4vw, 26px); margin-top:6px; line-height:1.14; letter-spacing:-0.01em}
   .home-head p{color:var(--fg-muted); font-size:14px; margin-top:8px; line-height:1.5}
 
   .list{display:flex; flex-direction:column; gap:12px; padding:16px 0 28px}
@@ -130,7 +130,7 @@
   .card-addr{font-size:12.5px; color:var(--fg-muted); display:flex; align-items:center; gap:5px}
   .card-foot{display:flex; justify-content:space-between; align-items:flex-end; margin-top:6px}
   .card-price-label{font-size:10.5px; color:var(--fg-muted); text-transform:uppercase; letter-spacing:.05em}
-  .card-price{font-size:17px; font-weight:800; font-family:'JetBrains Mono',monospace}
+  .card-price{font-size:17px; font-weight:800; font-family:'JetBrains Mono',monospace; white-space:nowrap}
   .card-deadline{font-size:12px; color:var(--fg-muted); text-align:right}
   .chevron{color:var(--fg-muted); flex:none; align-self:center}
 
@@ -161,7 +161,7 @@
   .hero.has-photos .hero-shade{display:block}
 
   .hero-arrow{
-    position:absolute; top:112px; z-index:4;
+    position:absolute; top:60px; z-index:4;
     width:30px; height:30px; border-radius:50%; border:none; cursor:pointer;
     background:rgba(15,18,24,.42); color:#fff; backdrop-filter:blur(6px);
     display:none; align-items:center; justify-content:center; padding:0;
@@ -185,7 +185,7 @@
     pointer-events:none;
   }
   .hero .developer{font-size:12px; font-weight:700; letter-spacing:.03em; opacity:.85}
-  .hero h2{font-size:24px; line-height:1.1}
+  .hero h2{font-size:clamp(17px, 4.9vw, 21px); line-height:1.16; letter-spacing:-0.01em}
   .hero-bottom{display:flex; align-items:flex-end; gap:12px}
   .hero .addr{font-size:13px; opacity:.92; display:flex; gap:5px; align-items:center; flex:1; min-width:0}
   .hero-dots{display:none; gap:5px; align-items:center; flex:none; padding-bottom:3px}
@@ -217,9 +217,9 @@
     padding:16px; display:flex; flex-direction:column; gap:10px;
   }
   .price-row{display:flex; justify-content:space-between; align-items:baseline; min-width:0}
-  .price-row .l{font-size:13px; color:var(--fg-muted)}
-  .price-row .v{font-family:'JetBrains Mono',monospace; font-weight:700; font-size:14px; text-align:right}
-  .price-row.total .v{font-size:22px; color:var(--accent)}
+  .price-row .l{font-size:13px; color:var(--fg-muted); flex:none; padding-right:10px}
+  .price-row .v{font-family:'JetBrains Mono',monospace; font-weight:700; font-size:14px; text-align:right; white-space:nowrap}
+  .price-row.total .v{font-size:clamp(15px, 4.6vw, 22px); color:var(--accent); white-space:nowrap}
   .price-sold{font-size:14px; color:var(--fg-muted); text-align:center; padding:8px 0}
 
   .specs{display:flex; flex-direction:column; border:1px solid var(--border); border-radius:14px; overflow:hidden; background:var(--bg-elevated)}
@@ -275,6 +275,21 @@
     padding:12px 13px; border-radius:11px; border:1px solid var(--border); background:var(--bg);
     color:var(--fg); font-size:15px; font-family:inherit;
   }
+  .phone-wrap{
+    display:flex; align-items:stretch; border:1px solid var(--border);
+    border-radius:11px; background:var(--bg); overflow:hidden;
+  }
+  .phone-wrap:focus-within{border-color:var(--accent)}
+  .phone-prefix{
+    display:flex; align-items:center; padding:0 11px 0 13px; font-size:15px; font-weight:700;
+    color:var(--fg); background:var(--bg-elevated); border-right:1px solid var(--border);
+  }
+  .phone-wrap input{
+    flex:1; min-width:0; border:none; background:transparent; border-radius:0;
+    padding:12px 13px; color:var(--fg); font-size:15px; font-family:inherit;
+  }
+  .phone-wrap input:focus{outline:none}
+
   .modal-actions{display:flex; gap:10px; margin-top:4px}
   .modal-actions button{flex:1; padding:12px; border-radius:11px; font-weight:700; font-size:14px; cursor:pointer; font-family:inherit; border:1px solid var(--border)}
   .btn-ghost{background:transparent; color:var(--fg)}
@@ -293,7 +308,7 @@
   <section id="view-home">
     <div class="home-head">
       <div class="eyebrow">Калининград · Новостройки</div>
-      <h1>Подбор квартиры</h1>
+      <h1>Подбор квартир без комиссии</h1>
       <p>3 жилых комплекса в продаже. Цены, планировки и условия покупки — на основе предложений застройщиков.</p>
     </div>
     <div class="list" id="list"></div>
@@ -805,16 +820,31 @@
       '<h3>Заявка на '+c.name+'</h3>'
       + '<p>Заполните, и откроется чат с риелтором — текст уже будет набран, останется отправить.</p>'
       + '<div class="field"><label for="leadName">Имя</label><input id="leadName" type="text" placeholder="Как к вам обращаться" autocomplete="name"></div>'
-      + '<div class="field"><label for="leadPhone">Телефон <span style="font-weight:400;opacity:.7">— по желанию</span></label><input id="leadPhone" type="tel" placeholder="+7 ___ ___-__-__" autocomplete="tel"></div>'
+      + '<div class="field"><label for="leadPhone">Телефон <span style="font-weight:400;opacity:.7">— по желанию</span></label>'
+        + '<div class="phone-wrap"><span class="phone-prefix">+7</span>'
+        + '<input id="leadPhone" type="tel" inputmode="numeric" maxlength="15" placeholder="924 123-45-67" autocomplete="tel"></div></div>'
       + '<div class="modal-actions">'
         + '<button class="btn-ghost" id="leadCancel" type="button">Отмена</button>'
         + '<button class="btn-primary" id="leadSubmit" type="button">Написать риелтору</button>'
       + '</div>';
     backdrop.hidden = false;
+
+    // клиент вводит только цифры после +7, формат подставляется сам
+    var phoneEl = document.getElementById('leadPhone');
+    phoneEl.addEventListener('input', function(){
+      var dgt = phoneEl.value.replace(/\D/g, '').slice(0, 10);
+      var out = dgt.slice(0, 3);
+      if (dgt.length > 3) out += ' ' + dgt.slice(3, 6);
+      if (dgt.length > 6) out += '-' + dgt.slice(6, 8);
+      if (dgt.length > 8) out += '-' + dgt.slice(8, 10);
+      phoneEl.value = out;
+    });
+
     document.getElementById('leadCancel').addEventListener('click', closeModal);
     document.getElementById('leadSubmit').addEventListener('click', function(){
       var name  = document.getElementById('leadName').value.trim();
-      var phone = document.getElementById('leadPhone').value.trim();
+      var digits = document.getElementById('leadPhone').value.replace(/\D/g, '');
+      var phone = digits ? '+7 ' + document.getElementById('leadPhone').value.trim() : '';
       if (TG && TG.HapticFeedback) { try { TG.HapticFeedback.notificationOccurred('success'); } catch(e){} }
       openManagerChat(leadText(c, name, phone));
       showThanks(c);
