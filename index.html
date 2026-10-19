@@ -692,9 +692,42 @@
       var digits = document.getElementById('leadPhone').value.replace(/\D/g, '');
       var phone = digits ? '+7 ' + document.getElementById('leadPhone').value.trim() : '';
       if (TG && TG.HapticFeedback) { try { TG.HapticFeedback.notificationOccurred('success'); } catch(e){} }
-      openManagerChat(leadText(c, name, phone));
-      showThanks(c);
+
+      var endpoint = SETTINGS && SETTINGS.leadEndpoint;
+      var initData = TG && TG.initData;
+      if (!endpoint || !initData){
+        openManagerChat(leadText(c, name, phone));
+        showThanks(c);
+        return;
+      }
+
+      // заявка уходит боту автоматически; если не вышло — старый способ через чат
+      var btn = document.getElementById('leadSubmit');
+      btn.disabled = true;
+      btn.textContent = 'Отправляем…';
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ initData: initData, complex: c.name, room: roomLabel(c), name: name, phone: phone })
+      }).then(function(r){
+        if (!r.ok) throw new Error('http ' + r.status);
+        showSent(c);
+      }).catch(function(){
+        openManagerChat(leadText(c, name, phone));
+        showThanks(c);
+      });
     });
+  }
+
+  function showSent(c){
+    modalBody.innerHTML =
+      '<div class="ok-state">'
+        + '<svg width="40" height="40" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M8 12.5l2.5 2.5L16 9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+        + '<h3>Заявка отправлена</h3>'
+        + '<p>Риелтор получил заявку по «'+c.name+'» и скоро свяжется с вами.</p>'
+        + '<button class="btn-primary" type="button" id="leadClose" style="margin-top:6px;width:100%;padding:12px;border-radius:11px;font-weight:700;cursor:pointer;font-family:inherit;border:1px solid var(--accent)">Готово</button>'
+      + '</div>';
+    document.getElementById('leadClose').addEventListener('click', closeModal);
   }
 
   function showThanks(c){
