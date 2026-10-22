@@ -338,6 +338,7 @@
   .v-shade{position:absolute; inset:0; pointer-events:none; background:linear-gradient(180deg, rgba(0,0,0,.3), transparent 30%, transparent 55%, rgba(0,0,0,.55))}
   .v-logo{position:absolute; left:14px; top:12px; color:#fff; text-shadow:0 1px 8px rgba(0,0,0,.45); pointer-events:none}
   .v-logo b{display:block; font:800 22px/1 'Unbounded', 'Arial Black', sans-serif; letter-spacing:.04em; text-transform:uppercase}
+  .v-logo img{display:block; width:58vw; max-width:230px; height:auto; filter:drop-shadow(0 1px 3px rgba(0,0,0,.55)) drop-shadow(0 0 10px rgba(0,0,0,.25))}
   .v-logo small{display:block; text-align:right; font-size:12px; font-weight:600; letter-spacing:.05em; margin-top:4px; border-top:1px solid rgba(255,255,255,.8); padding-top:3px}
   .v-count{position:absolute; top:12px; right:12px; background:rgba(0,0,0,.45); color:#fff; font-size:12px; font-weight:700; padding:4px 9px; border-radius:999px}
   .v-addr{position:absolute; left:14px; bottom:14px; display:flex; align-items:center; gap:6px; color:#fff; font-weight:700; font-size:15px; text-shadow:0 1px 6px rgba(0,0,0,.35)}
@@ -363,6 +364,7 @@
   .v-house h3{margin:4px 0 0; font:800 20px/1.15 'Unbounded', 'Arial Black', sans-serif; text-transform:uppercase}
   .v-house .facts{font-size:16px; line-height:1.55}
   .v-house .price{font:800 19px 'Unbounded', 'Arial Black', sans-serif}
+  .v-house .note{align-self:flex-start; background:var(--accent-soft); border-radius:8px; padding:6px 10px; font-size:14px; font-weight:700}
   .v-btn{align-self:flex-start; border:0; border-radius:8px; background:var(--accent); color:var(--accent-ink); font:inherit; font-size:15px; font-weight:700; padding:13px 20px; cursor:pointer}
   .v-btn.center{align-self:center}
   .v-lead{margin:18px 0 0; text-align:center; font-weight:700; font-size:19px}
@@ -372,6 +374,7 @@
   .v-cond .r{font:800 22px 'Unbounded', 'Arial Black', sans-serif}
   .v-cond .d{font-size:13px; color:var(--fg-muted)}
   .v-cond:last-child:nth-child(odd){grid-column:1/-1}
+  .v-cond.wide{grid-column:1/-1}
   @media (max-width:360px){ .v-conds{grid-template-columns:1fr} }
   footer.app-foot{padding:26px 0 30px; text-align:center; font-size:11.5px; color:var(--fg-muted)}
 </style>
@@ -791,6 +794,10 @@
     road:'<path d="M9 3h6l5 18H4z" fill="currentColor"/><path d="M12 6v3M12 11v3M12 16v3" stroke="#463936" stroke-width="1.6"/>',
     bus:'<rect x="5" y="3" width="14" height="15" rx="3" fill="currentColor"/><rect x="7" y="6" width="10" height="5" rx="1" fill="#463936"/><circle cx="8.5" cy="14.5" r="1.3" fill="#463936"/><circle cx="15.5" cy="14.5" r="1.3" fill="#463936"/><rect x="6.5" y="18" width="3" height="3" rx="1" fill="currentColor"/><rect x="14.5" y="18" width="3" height="3" rx="1" fill="currentColor"/>',
     city:'<rect x="5" y="3" width="9" height="18" fill="currentColor"/><rect x="14" y="9" width="5" height="12" fill="currentColor"/><path d="M7.5 7h4M7.5 10h4M7.5 13h4M7.5 16h4" stroke="#463936" stroke-width="1.4"/>',
+    bio:'<path d="M5 19C5 10 10 5 20 4c-1 10-6 15-15 15z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 19c4-5 7-8 11-11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+    net:'<circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 12h17M12 3.5c2.5 2.5 3.5 5.5 3.5 8.5s-1 6-3.5 8.5c-2.5-2.5-3.5-5.5-3.5-8.5s1-6 3.5-8.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+    tv:'<path d="M5 9a8 8 0 008 8L5 9z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 13l4-4M15 3a6 6 0 016 6M15 6a3 3 0 013 3M8 17l-2 4h7l-2-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+    power:'<path d="M13 2L5 14h6l-1 8 8-12h-6z" fill="currentColor"/>',
     sea:'<path d="M3 17c2 0 2-1.5 4.5-1.5S9.5 17 12 17s2.5-1.5 4.5-1.5S19 17 21 17v3H3z" fill="currentColor"/><path d="M5 14c0-5 4-9 9-9 2.5 0 4 1.5 4 3.5-2-1-4.5 0-4.5 2.5 0 1.5 1 2.5 2.5 3" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>'
   };
 
@@ -838,7 +845,7 @@
 
     document.getElementById('vTitle').textContent = c.name;
     document.getElementById('vSub').textContent = c.clsLabel || '';
-    document.getElementById('vLogo').innerHTML = '<b>' + esc(c.logo || c.name) + '</b>' + (c.logoSub ? '<small>' + esc(c.logoSub) + '</small>' : '');
+    document.getElementById('vLogo').innerHTML = c.logoImg ? '<img src="' + c.logoImg + '" alt="' + esc(c.logo || c.name) + '">' : '<b>' + esc(c.logo || c.name) + '</b>' + (c.logoSub ? '<small>' + esc(c.logoSub) + '</small>' : '');
     document.getElementById('vAddr').textContent = c.addr || '';
 
     var photos = c.photos || [];
@@ -870,6 +877,7 @@
         + '<h3>' + esc(h.name) + '</h3>'
         + '<div class="facts">Общая площадь ' + esc(h.area) + ' кв.м.<br>Спальни ' + esc(h.bedrooms) + '<br>Участок ' + esc(h.plot) + ' соток</div>'
         + (h.price ? '<div class="price">' + esc(h.price) + '</div>' : '')
+        + (h.note ? '<div class="note">' + esc(h.note) + '</div>' : '')
         + '<button class="v-btn" type="button">Оставить заявку →</button>';
       el.querySelector('button').addEventListener('click', function(){ openLeadForm(lead('дом ' + h.name)); });
       list.appendChild(el);
@@ -888,7 +896,7 @@
     document.getElementById('vCondLead').textContent = c.conditionsLead || '';
     document.getElementById('vCondTitle').textContent = c.conditionsTitle || 'Условия покупки';
     document.getElementById('vConds').innerHTML = (c.conditions || []).map(function(x){
-      return '<div class="v-cond"><div class="t">' + esc(x.title) + '</div>'
+      return '<div class="v-cond' + (x.wide ? ' wide' : '') + '"><div class="t">' + esc(x.title) + '</div>'
         + (x.rate ? '<div class="r">' + esc(x.rate) + '</div>' : '')
         + (x.text ? '<div class="d">' + esc(x.text) + '</div>' : '') + '</div>';
     }).join('');

@@ -267,6 +267,7 @@ var SITE_DATA = {
       type:'village',
       name:'Посёлок «Родники»',
       // надпись в левом верхнем углу карусели
+      // (вместо надписи можно картинку: logoImg:'photos/имя-logo.png')
       logo:'Родники',
       logoSub:'park house',
       // надпись в левом нижнем углу карусели
@@ -286,7 +287,7 @@ var SITE_DATA = {
       // зелёная плашка под каруселью
       headline:'8 типов домов',
       // белые плашки с иконками. Иконки на выбор:
-      // gas, water, drain, clean, road, city, sea, bus
+      // gas, water, drain, clean, road, city, sea, bus, bio, net, tv, power
       // wide:true — плашка на всю ширину (для длинного текста)
       perks:[
         {icon:'gas',   text:'Газ'},
@@ -326,6 +327,58 @@ var SITE_DATA = {
         {title:'Рассрочка от застройщика', text:'Подберём для вас индивидуальные условия.'},
         {title:'100% оплата', text:'Оплата наличными или переводом на расчётный счёт, указанный в договоре.'},
         {title:'Trade-in', text:'Продадим вашу старую недвижимость в зачёт стоимости выбранного дома.'}
+      ],
+      consultText:'Получить консультацию'
+    },
+    // -------------------------------------------------------------------
+    // КОТТЕДЖНЫЙ ПОСЁЛОК «Рублёвочка Юг». Копия блока «Родников».
+    // Источник данных: рублевочка.рф/ug, 22 октября 2026.
+    // -------------------------------------------------------------------
+    {
+      id:'rublevochka',
+      section:'cottages',
+      type:'village',
+      name:'Посёлок «Рублёвочка Юг»',
+      // название для заявок; на карусели вместо него картинка-логотип
+      logo:'Рублёвочка Юг',
+      logoImg:'photos/rublevochka-logo.png',
+      addr:'п. Голубево, ул. Лазурная',
+      clsLabel:'Коттеджный посёлок',
+      deadlineShort:'5 типов домов',
+      priceFrom:11000000,
+      photos:[
+        'photos/rublevochka-1.jpg',
+        'photos/rublevochka-2.jpg',
+        'photos/rublevochka-3.jpg',
+        'photos/rublevochka-4.jpg'
+      ],
+      headline:'5 типов домов',
+      perks:[
+        {icon:'bio',   text:'Собственная биостанция'},
+        {icon:'water', text:'Питьевой центральный водопровод'},
+        {icon:'drain', text:'Центральная ливневая канализация'},
+        {icon:'net',   text:'Интернет оптоволокно'},
+        {icon:'tv',    text:'Спутниковое телевидение'},
+        {icon:'gas',   text:'Центральный газ'},
+        {icon:'road',  text:'Дороги 150 метров'},
+        {icon:'power', text:'Электричество 15 кВт'}
+      ],
+      tagline:['Готовые дома', 'в наличии!'],
+      // note — строка в плашке под ценой
+      houses:[
+        {name:'Тип 1', photo:'photos/rublevochka-tip1.jpg', area:'85',  bedrooms:'2', plot:'5', price:'11 млн ₽',   note:'Дом с ремонтом от 1,5 млн ₽'},
+        {name:'Тип 2', photo:'photos/rublevochka-tip2.jpg', area:'90',  bedrooms:'2', plot:'6', price:'12 млн ₽',   note:'Дом с ремонтом от 1,6 млн ₽'},
+        {name:'Тип 3', photo:'photos/rublevochka-tip3.jpg', area:'100', bedrooms:'3', plot:'6', price:'13,5 млн ₽', note:'Дом с ремонтом от 1,95 млн ₽'},
+        {name:'Тип 4', photo:'photos/rublevochka-tip4.jpg', area:'124', bedrooms:'3', plot:'6', price:'15 млн ₽',   note:'Дом с ремонтом от 2,3 млн ₽'},
+        {name:'Тип 5', photo:'photos/rublevochka-tip5.jpg', area:'116', bedrooms:'3', plot:'8', price:'18 млн ₽',   note:'Дом с ремонтом от 2,8 млн ₽'}
+      ],
+      conditionsLead:'Дом может позволить себе каждый',
+      conditionsTitle:'Условия покупки',
+      conditions:[
+        {title:'Ипотека', text:'Поможем подобрать банк и подходящую программу.', wide:true},
+        {title:'Без гражданства РФ', text:'Дом можно купить без наличия гражданства РФ.'},
+        {title:'Гражданам Евросоюза', text:'Поможем с оформлением и ответим на все вопросы.'},
+        {title:'30 минут до границы', text:'До международного автомобильного пункта пропуска Мамоново – Гжехотки.', wide:true}
       ],
       consultText:'Получить консультацию'
     }
