@@ -4,7 +4,10 @@ compatibility_date = "2026-10-01"
 
 [vars]
 ALLOWED_ORIGIN = "https://jonieao25-create.github.io"
+APP_URL = "https://jonieao25-create.github.io/1/"
+MANAGER = "Evgeniy_Rieltor_KLD"
 
 # Секреты задаются командами (в файл их не записывать):
 #   npx wrangler secret put BOT_TOKEN
 #   npx wrangler secret put MANAGER_ID
+#   npx wrangler secret put WEBHOOK_SECRET

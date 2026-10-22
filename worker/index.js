@@ -4,6 +4,13 @@
 //   BOT_TOKEN   — токен бота от @BotFather
 //   MANAGER_ID  — числовой id чата риелтора (куда присылать заявки)
 //   ALLOWED_ORIGIN — адрес сайта, например https://jonieao25-create.github.io
+//
+// Второе дело Worker — отвечать боту (адрес /tg). На /start бот присылает
+// кнопки под полем ввода, каждая открывает свой раздел мини-приложения.
+//   WEBHOOK_SECRET — придуманный вами пароль (латиница и цифры), по нему
+//                    Worker узнаёт, что сообщение пришло именно от Telegram
+//   APP_URL        — адрес мини-приложения
+//   MANAGER        — ваш ник в Telegram без @ (для кнопки «Связаться»)
 
 const MAX_AGE_SEC = 24 * 60 * 60;
 
@@ -60,8 +67,88 @@ function reply(env, status, body) {
   });
 }
 
+// ---------- бот: кнопки под полем ввода ----------
+
+function tgApi(env, method, body) {
+  return fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/${method}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+}
+
+const CONTACT_BTN = '📞 Связаться';
+
+// Клавиатура 2×2. Кнопка с web_app открывает мини-приложение
+// сразу на нужном разделе (?section=... — id раздела из data.js).
+function mainKeyboard(env) {
+  const app = (section) => ({ web_app: { url: `${env.APP_URL}?section=${section}` } });
+  return {
+    keyboard: [
+      [{ text: '🏢 Новостройки', ...app('newbuilds') }, { text: '🏡 Коттеджные посёлки', ...app('cottages') }],
+      [{ text: '🌊 Квартиры в прибрежье', ...app('coast') }, { text: CONTACT_BTN }],
+    ],
+    resize_keyboard: true,
+    is_persistent: true,
+  };
+}
+
+async function handleBotUpdate(update, env) {
+  const msg = update.message;
+  if (!msg || !msg.chat) return;
+  const text = msg.text || '';
+
+  if (text === CONTACT_BTN) {
+    await tgApi(env, 'sendMessage', {
+      chat_id: msg.chat.id,
+      text: `Напишите мне в Telegram: @${env.MANAGER}\nОтвечу и подберу варианты.`,
+      reply_markup: mainKeyboard(env),
+    });
+    return;
+  }
+
+  // /start и любое другое сообщение — приветствие с кнопками
+  await tgApi(env, 'sendMessage', {
+    chat_id: msg.chat.id,
+    text: 'Здравствуйте! Выберите, что вас интересует, кнопкой ниже 👇',
+    reply_markup: mainKeyboard(env),
+  });
+}
+
 export default {
   async fetch(request, env) {
+    const url = new URL(request.url);
+
+    // Сообщения от Telegram для бота
+    if (url.pathname === '/tg') {
+      if (request.method !== 'POST' ||
+          request.headers.get('X-Telegram-Bot-Api-Secret-Token') !== env.WEBHOOK_SECRET) {
+        return new Response('forbidden', { status: 403 });
+      }
+      try {
+        await handleBotUpdate(await request.json(), env);
+      } catch (e) {
+        // отвечаем 200 в любом случае, иначе Telegram будет слать то же сообщение снова
+      }
+      return new Response('ok');
+    }
+
+    // Один раз подключить бота к Worker: открыть в браузере
+    //   https://<адрес worker>/setup?key=<WEBHOOK_SECRET>
+    if (url.pathname === '/setup') {
+      if (!env.WEBHOOK_SECRET || url.searchParams.get('key') !== env.WEBHOOK_SECRET) {
+        return new Response('wrong key', { status: 403 });
+      }
+      const r = await tgApi(env, 'setWebhook', {
+        url: `${url.origin}/tg`,
+        secret_token: env.WEBHOOK_SECRET,
+        allowed_updates: ['message'],
+      });
+      return new Response(await r.text(), {
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      });
+    }
+
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: cors(env) });
     }
