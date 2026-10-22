@@ -102,6 +102,21 @@
 
   .list{display:flex; flex-direction:column; gap:12px; padding:16px 0 28px}
 
+  /* переключатель разделов: Новостройки / Коттеджи / Прибрежье */
+  .sec-tabs{display:flex; gap:8px; overflow-x:auto; padding:14px 0 2px; scrollbar-width:none}
+  .sec-tabs::-webkit-scrollbar{display:none}
+  .sec-tab{
+    flex:0 0 auto; padding:8px 14px; border-radius:999px; cursor:pointer;
+    border:1px solid var(--border); background:var(--bg-elevated); color:var(--fg);
+    font:inherit; font-size:13.5px; font-weight:700; white-space:nowrap;
+  }
+  .sec-tab.active{background:var(--accent); border-color:var(--accent); color:var(--accent-ink)}
+  .sec-empty{
+    background:var(--bg-elevated); border:1px dashed var(--border); border-radius:18px;
+    padding:22px 18px; text-align:center; color:var(--fg-muted); font-size:14px; line-height:1.5;
+  }
+  .sec-empty .btn-primary{margin-top:14px; padding:12px 18px; border-radius:11px; font:inherit; font-weight:700; cursor:pointer; border:1px solid var(--accent)}
+
   .card{
     background:var(--bg-elevated); border:1px solid var(--border); border-radius:18px;
     box-shadow:var(--shadow); cursor:pointer; overflow:hidden;
@@ -311,6 +326,7 @@
 
   <!-- ===== HOME ===== -->
   <section id="view-home">
+    <div class="sec-tabs" id="secTabs"></div>
     <div class="home-head">
       <div class="eyebrow">Калининград · Новостройки</div>
       <h1>Подбор квартир без комиссии</h1>
@@ -430,37 +446,103 @@
       + '</svg>';
   }
 
+  // ---------- разделы (Новостройки, Коттеджные посёлки, ...) ----------
+  // Список разделов берётся из data.js. Если его там нет — один общий раздел.
+  var SECTIONS = (SITE_DATA.sections && SITE_DATA.sections.length)
+    ? SITE_DATA.sections
+    : [{ id:'all' }];
+  var sectionById = {};
+  SECTIONS.forEach(function(s){ sectionById[s.id] = s; });
+  var currentSection = SECTIONS[0].id;
+
+  // ЖК без поля section попадает в первый раздел
+  function sectionOf(c){
+    return (c.section && sectionById[c.section]) ? c.section : SECTIONS[0].id;
+  }
+
+  var secTabsEl = document.getElementById('secTabs');
+  if (SECTIONS.length > 1){
+    SECTIONS.forEach(function(s){
+      var b = document.createElement('button');
+      b.className = 'sec-tab';
+      b.type = 'button';
+      b.setAttribute('data-sec', s.id);
+      b.textContent = s.tab || s.title;
+      b.addEventListener('click', function(){ renderHome(s.id); });
+      secTabsEl.appendChild(b);
+    });
+  } else {
+    secTabsEl.hidden = true;
+  }
+
   // ---------- render home list ----------
   var listEl = document.getElementById('list');
-  complexes.forEach(function(c, i){
-    var card = document.createElement('button');
-    card.className = 'card';
-    card.setAttribute('data-id', c.id);
-    card.innerHTML =
-      ((c.photos && c.photos.length)
-        ? '<div class="card-art" style="background-image:linear-gradient(180deg, transparent 40%, rgba(0,0,0,.45) 100%), url(\''+c.photos[0]+'\'); background-size:cover; background-position:center; color:#fff">'
-            + '<span class="card-photo-count">'+c.photos.length+' фото</span>'
-        : '<div class="card-art" style="--art-bg:'+c.artHue+'; color:var(--accent)">' + buildingArt(c.name.length + i)
-      )
-        + '<span class="class-badge'+(c.cls==='econom'?' econom':'')+'">'+c.clsLabel+'</span>'
-      + '</div>'
-      + '<div class="card-body">'
-        + '<div class="card-title">'+c.name+'</div>'
-        + '<div class="card-addr">'
-          + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-7.2 7-12a7 7 0 10-14 0c0 4.8 7 12 7 12z" stroke="currentColor" stroke-width="2"/></svg>'
-          + '<span>'+c.addr+'</span>'
+
+  function renderHome(sectionId){
+    if (!sectionById[sectionId]) sectionId = SECTIONS[0].id;
+    currentSection = sectionId;
+    var sec = sectionById[sectionId];
+
+    [].forEach.call(secTabsEl.children, function(b){
+      var on = b.getAttribute('data-sec') === sectionId;
+      b.classList.toggle('active', on);
+      if (on) secTabsEl.scrollLeft = b.offsetLeft - 16;   // активная вкладка всегда видна
+    });
+
+    // заголовок раздела: из раздела, а если там пусто — из общих настроек
+    var eyebrow = document.querySelector('.home-head .eyebrow');
+    var h1 = document.querySelector('.home-head h1');
+    var intro = document.querySelector('.home-head p');
+    eyebrow.textContent = sec.eyebrow || SETTINGS.eyebrow || eyebrow.textContent;
+    h1.textContent = sec.title || SETTINGS.title || h1.textContent;
+    intro.textContent = sec.intro || SETTINGS.intro || intro.textContent;
+
+    listEl.innerHTML = '';
+    var items = complexes.filter(function(c){ return sectionOf(c) === sectionId; });
+
+    if (!items.length){
+      var empty = document.createElement('div');
+      empty.className = 'sec-empty';
+      empty.innerHTML = (sec.emptyText || 'Объекты в этом разделе скоро появятся. Напишите — подберу варианты лично.')
+        + '<br><button class="btn-primary" type="button">Написать риелтору</button>';
+      empty.querySelector('button').addEventListener('click', function(){
+        openManagerChat('Здравствуйте! Интересует раздел «' + (sec.tab || sec.title || '') + '».');
+      });
+      listEl.appendChild(empty);
+      return;
+    }
+
+    items.forEach(function(c, i){
+      var card = document.createElement('button');
+      card.className = 'card';
+      card.setAttribute('data-id', c.id);
+      card.innerHTML =
+        ((c.photos && c.photos.length)
+          ? '<div class="card-art" style="background-image:linear-gradient(180deg, transparent 40%, rgba(0,0,0,.45) 100%), url(\''+c.photos[0]+'\'); background-size:cover; background-position:center; color:#fff">'
+              + '<span class="card-photo-count">'+c.photos.length+' фото</span>'
+          : '<div class="card-art" style="--art-bg:'+c.artHue+'; color:var(--accent)">' + buildingArt(c.name.length + i)
+        )
+          + '<span class="class-badge'+(c.cls==='econom'?' econom':'')+'">'+c.clsLabel+'</span>'
         + '</div>'
-        + '<div class="card-foot">'
-          + '<div>'
-            + '<div class="card-price-label">Цена от</div>'
-            + '<div class="card-price">'+(c.priceFrom ? fmtRub(c.priceFrom) : 'уточняется')+'</div>'
+        + '<div class="card-body">'
+          + '<div class="card-title">'+c.name+'</div>'
+          + '<div class="card-addr">'
+            + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-7.2 7-12a7 7 0 10-14 0c0 4.8 7 12 7 12z" stroke="currentColor" stroke-width="2"/></svg>'
+            + '<span>'+c.addr+'</span>'
           + '</div>'
-          + '<div class="card-deadline">'+c.deadlineShort+'</div>'
-        + '</div>'
-      + '</div>';
-    card.addEventListener('click', function(){ openDetail(c.id); });
-    listEl.appendChild(card);
-  });
+          + '<div class="card-foot">'
+            + '<div>'
+              + '<div class="card-price-label">Цена от</div>'
+              + '<div class="card-price">'+(c.priceFrom ? fmtRub(c.priceFrom) : 'уточняется')+'</div>'
+            + '</div>'
+            + '<div class="card-deadline">'+c.deadlineShort+'</div>'
+          + '</div>'
+        + '</div>';
+      card.addEventListener('click', function(){ openDetail(c.id); });
+      listEl.appendChild(card);
+    });
+  }
+  renderHome(currentSection);
 
   // ---------- detail view ----------
   var viewHome = document.getElementById('view-home');
@@ -760,12 +842,6 @@
       root.style.setProperty('--accent', SETTINGS.accentDark);
       root.style.setProperty('--accent-soft', SETTINGS.accentDark + '22');
     }
-    var eyebrow = document.querySelector('.home-head .eyebrow');
-    var h1 = document.querySelector('.home-head h1');
-    var intro = document.querySelector('.home-head p');
-    if (SETTINGS.eyebrow && eyebrow) eyebrow.textContent = SETTINGS.eyebrow;
-    if (SETTINGS.title && h1) h1.textContent = SETTINGS.title;
-    if (SETTINGS.intro && intro) intro.textContent = SETTINGS.intro;
     var cta = document.getElementById('ctaBtn');
     if (SETTINGS.ctaText && cta) cta.textContent = SETTINGS.ctaText;
   })();
@@ -789,11 +865,24 @@
       var m = location.search.match(/[?&]startapp=([A-Za-z0-9_-]+)/);
       if (m) start = m[1];
     }
-    if (start && byId[start]) openDetail(start);
+    openStart(start);
   } else {
     // тот же параметр работает и в обычном браузере — удобно для проверки
     var m2 = location.search.match(/[?&]startapp=([A-Za-z0-9_-]+)/);
-    if (m2 && byId[m2[1]]) openDetail(m2[1]);
+    openStart(m2 ? m2[1] : '');
+  }
+
+  // Что открыть при запуске. Кнопки бота открывают адрес вида
+  //   .../?section=cottages        → сразу раздел «Коттеджные посёлки»
+  // а startapp может быть и id раздела, и id ЖК.
+  function openStart(start){
+    var ms = location.search.match(/[?&]section=([A-Za-z0-9_-]+)/);
+    if (ms && sectionById[ms[1]]) renderHome(ms[1]);
+    if (start && sectionById[start]) renderHome(start);
+    else if (start && byId[start]){
+      renderHome(sectionOf(byId[start]));
+      openDetail(start);
+    }
   }
 
 })();
