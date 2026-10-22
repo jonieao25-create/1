@@ -86,7 +86,7 @@ function mainKeyboard(env) {
   return {
     keyboard: [
       [{ text: '🏢 Новостройки', ...app('newbuilds') }, { text: '🏡 Коттеджные посёлки', ...app('cottages') }],
-      [{ text: '🌊 Квартиры в прибрежье', ...app('coast') }, { text: CONTACT_BTN }],
+      [{ text: '🌊 ЖК на Побережье', ...app('coast') }, { text: CONTACT_BTN }],
     ],
     resize_keyboard: true,
     is_persistent: true,
