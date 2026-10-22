@@ -381,6 +381,68 @@ var SITE_DATA = {
         {title:'30 минут до границы', text:'До международного автомобильного пункта пропуска Мамоново – Гжехотки.', wide:true}
       ],
       consultText:'Получить консультацию'
+    },
+    // -------------------------------------------------------------------
+    // КОТТЕДЖНЫЙ ПОСЁЛОК «Ласкино Парк». Копия блока «Родников».
+    // Источник данных: laskino-park.ru, 22 октября 2026.
+    // Проданные типы (96 и 141 м²) и квадрохаусы «по запросу» не показаны.
+    // -------------------------------------------------------------------
+    {
+      id:'laskino',
+      section:'cottages',
+      type:'village',
+      name:'Посёлок «Ласкино Парк»',
+      // название для заявок; на карусели вместо него картинка-логотип
+      logo:'Ласкино Парк',
+      logoImg:'photos/laskino-logo.png',
+      addr:'п. Ласкино, ул. 1-я Луговая',
+      clsLabel:'Коттеджный посёлок',
+      deadlineShort:'11 типов домов',
+      priceFrom:9300000,
+      photos:[
+        'photos/laskino-1.jpg',
+        'photos/laskino-2.jpg',
+        'photos/laskino-3.jpg',
+        'photos/laskino-4.jpg',
+        'photos/laskino-5.jpg'
+      ],
+      headline:'11 типов домов',
+      perks:[
+        {icon:'gas',   text:'Центральный газ'},
+        {icon:'water', text:'Центральный водопровод'},
+        {icon:'clean', text:'Центральная канализация'},
+        {icon:'power', text:'Все сети под землёй'},
+        {icon:'road',  text:'15 км дорог из плитки'},
+        {icon:'bus',   text:'Своя ЖД станция: 12 мин до города'},
+        {icon:'sea',   text:'40 минут до моря'},
+        {icon:'bio',   text:'Парк 300 000 м²'}
+      ],
+      tagline:['Готовые дома.', 'Под ключ'],
+      // price — серый ключ, note — цена с ремонтом «стандарт»; plot можно не указывать
+      houses:[
+        {name:'Дом 75 м²',      photo:'photos/laskino-h75.jpg',  area:'75',  bedrooms:'2', plot:'',      price:'9,9 млн ₽',     note:'С ремонтом «стандарт»: 11,8 млн ₽'},
+        {name:'Дом 85 м²',      photo:'photos/laskino-h85.jpg',  area:'85',  bedrooms:'2', plot:'4–5',   price:'11,5 млн ₽',    note:'С ремонтом «стандарт»: 13,5 млн ₽'},
+        {name:'Дом 87 м²',      photo:'photos/laskino-h87.jpg',  area:'87',  bedrooms:'2', plot:'',      price:'10,9 млн ₽',    note:'С ремонтом «стандарт»: 12,8 млн ₽'},
+        {name:'Дом 100 м²',     photo:'photos/laskino-h100.jpg', area:'100', bedrooms:'3', plot:'4–5',   price:'13 млн ₽',      note:'С ремонтом «стандарт»: 15,2 млн ₽'},
+        {name:'Дом 115 м²',     photo:'photos/laskino-h115.jpg', area:'115', bedrooms:'2', plot:'5',     price:'14,3 млн ₽',    note:'С ремонтом «стандарт»: 16,6 млн ₽'},
+        {name:'Дом 117 м²',     photo:'photos/laskino-h117.jpg', area:'117', bedrooms:'3', plot:'5',     price:'14,6 млн ₽',    note:'С ремонтом «стандарт»: 16,9 млн ₽'},
+        {name:'Дом 134 м² с навесом для авто', photo:'photos/laskino-h134.jpg', area:'134', bedrooms:'3', plot:'6–7,5', price:'от 15,1 млн ₽', note:'С ремонтом «стандарт»: 18,6 млн ₽'},
+        {name:'Дом 160 м² с гаражом', photo:'photos/laskino-h160.jpg', area:'160', bedrooms:'3', plot:'6,5–9', price:'от 18,8 млн ₽', note:'С ремонтом «стандарт»: 22,8 млн ₽'},
+        {name:'Дом 208 м² с гаражом', photo:'photos/laskino-h208.jpg', area:'208', bedrooms:'3', plot:'7–12',  price:'от 23,4 млн ₽', note:'С ремонтом «стандарт»: 30,4 млн ₽. У каждой спальни свой санузел'},
+        {name:'Дуплекс 72 м²',  photo:'photos/laskino-d72.jpg',  area:'72',  bedrooms:'2', plot:'',      price:'9,3 млн ₽',     note:'С ремонтом «стандарт»: 10,5 млн ₽'},
+        {name:'Дуплекс 82 м²',  photo:'photos/laskino-d82.jpg',  area:'82',  bedrooms:'2', plot:'',      price:'от 9,5 млн ₽',  note:'С ремонтом «стандарт»: от 11,1 млн ₽'}
+      ],
+      conditionsLead:'Дом может позволить себе каждый',
+      conditionsTitle:'Условия покупки',
+      conditions:[
+        {title:'Ипотека', rate:'от 5,9%', text:'Подберём подходящую программу.', wide:true},
+        {title:'Семейная ипотека', rate:'6%', text:'Для семей с детьми.'},
+        {title:'IT-ипотека', rate:'6%', text:'Для сотрудников IT-компаний.'},
+        {title:'Военная ипотека', rate:'6%', text:'Для военнослужащих.'},
+        {title:'Базовая ипотека', rate:'19%', text:'Без льгот.'},
+        {title:'Рассрочка до 3 лет', rate:'3–7%', text:'Первый взнос от 30% от цены «серого ключа».', wide:true}
+      ],
+      consultText:'Получить консультацию'
     }
   ]
 };

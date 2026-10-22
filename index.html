@@ -338,7 +338,7 @@
   .v-shade{position:absolute; inset:0; pointer-events:none; background:linear-gradient(180deg, rgba(0,0,0,.3), transparent 30%, transparent 55%, rgba(0,0,0,.55))}
   .v-logo{position:absolute; left:14px; top:12px; color:#fff; text-shadow:0 1px 8px rgba(0,0,0,.45); pointer-events:none}
   .v-logo b{display:block; font:800 22px/1 'Unbounded', 'Arial Black', sans-serif; letter-spacing:.04em; text-transform:uppercase}
-  .v-logo img{display:block; width:58vw; max-width:230px; height:auto; filter:drop-shadow(0 1px 3px rgba(0,0,0,.55)) drop-shadow(0 0 10px rgba(0,0,0,.25))}
+  .v-logo img{display:block; width:auto; max-width:min(58vw, 230px); max-height:140px; height:auto; filter:drop-shadow(0 1px 3px rgba(0,0,0,.55)) drop-shadow(0 0 10px rgba(0,0,0,.25))}
   .v-logo small{display:block; text-align:right; font-size:12px; font-weight:600; letter-spacing:.05em; margin-top:4px; border-top:1px solid rgba(255,255,255,.8); padding-top:3px}
   .v-count{position:absolute; top:12px; right:12px; background:rgba(0,0,0,.45); color:#fff; font-size:12px; font-weight:700; padding:4px 9px; border-radius:999px}
   .v-addr{position:absolute; left:14px; bottom:14px; display:flex; align-items:center; gap:6px; color:#fff; font-weight:700; font-size:15px; text-shadow:0 1px 6px rgba(0,0,0,.35)}
@@ -875,7 +875,7 @@
       el.className = 'v-house';
       el.innerHTML = '<div class="v-house-photo" style="background-image:url(\'' + h.photo + '\')"></div>'
         + '<h3>' + esc(h.name) + '</h3>'
-        + '<div class="facts">Общая площадь ' + esc(h.area) + ' кв.м.<br>Спальни ' + esc(h.bedrooms) + '<br>Участок ' + esc(h.plot) + ' соток</div>'
+        + '<div class="facts">Общая площадь ' + esc(h.area) + ' кв.м.<br>Спальни ' + esc(h.bedrooms) + (h.plot ? '<br>Участок ' + esc(h.plot) + ' соток' : '') + '</div>'
         + (h.price ? '<div class="price">' + esc(h.price) + '</div>' : '')
         + (h.note ? '<div class="note">' + esc(h.note) + '</div>' : '')
         + '<button class="v-btn" type="button">Оставить заявку →</button>';
