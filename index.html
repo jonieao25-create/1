@@ -845,7 +845,7 @@
 
     document.getElementById('vTitle').textContent = c.name;
     document.getElementById('vSub').textContent = c.clsLabel || '';
-    document.getElementById('vLogo').innerHTML = c.logoImg ? '<img src="' + c.logoImg + '" alt="' + esc(c.logo || c.name) + '">' : '<b>' + esc(c.logo || c.name) + '</b>' + (c.logoSub ? '<small>' + esc(c.logoSub) + '</small>' : '');
+    document.getElementById('vLogo').innerHTML = c.hideLogo ? '' : c.logoImg ? '<img src="' + c.logoImg + '" alt="' + esc(c.logo || c.name) + '">' : '<b>' + esc(c.logo || c.name) + '</b>' + (c.logoSub ? '<small>' + esc(c.logoSub) + '</small>' : '');
     document.getElementById('vAddr').textContent = c.addr || '';
 
     var photos = c.photos || [];
@@ -875,7 +875,7 @@
       el.className = 'v-house';
       el.innerHTML = '<div class="v-house-photo" style="background-image:url(\'' + h.photo + '\')"></div>'
         + '<h3>' + esc(h.name) + '</h3>'
-        + '<div class="facts">Общая площадь ' + esc(h.area) + ' кв.м.<br>Спальни ' + esc(h.bedrooms) + (h.plot ? '<br>Участок ' + esc(h.plot) + ' соток' : '') + '</div>'
+        + '<div class="facts">Общая площадь ' + esc(h.area) + ' кв.м.' + (h.bedrooms ? '<br>Спальни ' + esc(h.bedrooms) : '') + (h.plot ? '<br>Участок ' + esc(h.plot) + ' соток' : '') + '</div>'
         + (h.price ? '<div class="price">' + esc(h.price) + '</div>' : '')
         + (h.note ? '<div class="note">' + esc(h.note) + '</div>' : '')
         + '<button class="v-btn" type="button">Оставить заявку →</button>';
