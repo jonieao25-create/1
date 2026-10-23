@@ -435,6 +435,55 @@ var SITE_DATA = {
         {title:'Рассрочка до 3 лет', rate:'3–7%', text:'Первый взнос от 30% от цены «серого ключа».', wide:true}
       ],
       consultText:'Получить консультацию'
+    },
+    // -------------------------------------------------------------------
+    // КОТТЕДЖНЫЙ ПОСЁЛОК «Новая Рублёвочка». Копия блока «Родников».
+    // Источник данных: рублевочка.рф/nr, 23 октября 2026.
+    // -------------------------------------------------------------------
+    {
+      id:'novrublevochka',
+      section:'cottages',
+      type:'village',
+      name:'Посёлок «Новая Рублёвочка»',
+      logo:'Новая Рублёвочка',
+      addr:'п. Голубево, Гурьевский район',
+      clsLabel:'Коттеджный посёлок',
+      deadlineShort:'6 типов домов',
+      priceFrom:11000000,
+      photos:[
+        'photos/novrublevochka-1.jpg',
+        'photos/novrublevochka-2.jpg',
+        'photos/novrublevochka-3.jpg',
+        'photos/novrublevochka-4.jpg'
+      ],
+      headline:'6 типов домов',
+      perks:[
+        {icon:'shield', text:'Территория огорожена: КПП, охрана, видеонаблюдение', wide:true},
+        {icon:'tree',   text:'Рядом заповедник Вальдбург'},
+        {icon:'city',   text:'Сквер и гостевая парковка'},
+        {icon:'ball',   text:'Открытые теннисные корты'},
+        {icon:'ball',   text:'Детская футбольная школа'},
+        {icon:'clean',  text:'Управляющая компания: дороги, покос, уборка', wide:true}
+      ],
+      tagline:['Все дома в наличии', 'и готовы к показу'],
+      // note — цена ремонта (на сайте «Ремонт База» и «Ремонт Комфорт»)
+      houses:[
+        {name:'Тип 1', photo:'photos/novrublevochka-tip1.jpg', area:'77',     bedrooms:'2',   plot:'3',   price:'11 млн ₽',      note:'Ремонт от 1,55 млн ₽'},
+        {name:'Тип 2', photo:'photos/novrublevochka-tip2.jpg', area:'84',     bedrooms:'2',   plot:'6',   price:'12 млн ₽',      note:'Ремонт от 1,6 млн ₽'},
+        {name:'Тип 3', photo:'photos/novrublevochka-tip3.jpg', area:'98',     bedrooms:'3',   plot:'6',   price:'13 млн ₽',      note:'Ремонт от 1,95 млн ₽'},
+        {name:'Тип 4', photo:'photos/novrublevochka-tip4.jpg', area:'120',    bedrooms:'3',   plot:'6',   price:'14,5 млн ₽',    note:'Ремонт от 2,3 млн ₽'},
+        {name:'Тип 5', photo:'photos/novrublevochka-tip5.jpg', area:'120–122', bedrooms:'2–3', plot:'6–8', price:'от 14,5 млн ₽', note:'Ремонт от 2,8 млн ₽'},
+        {name:'Тип 6', photo:'photos/novrublevochka-tip6.jpg', area:'148',    bedrooms:'3',   plot:'8',   price:'18 млн ₽',      note:'Ремонт от 3,1 млн ₽'}
+      ],
+      conditionsLead:'Дом мечты может позволить себе каждый',
+      conditionsTitle:'Условия покупки',
+      conditions:[
+        {title:'Сельская ипотека', rate:'3%', text:'Все типы домов подходят под программу.', wide:true},
+        {title:'Без гражданства РФ', text:'Дом можно купить без наличия гражданства РФ.'},
+        {title:'Расчёт в Евросоюзе', text:'Оплату можно провести на территории ЕС.'},
+        {title:'30 минут до границы', text:'До международного автомобильного пункта пропуска Мамоново – Гжехотки.', wide:true}
+      ],
+      consultText:'Получить консультацию'
     }
   ]
 };
