@@ -445,8 +445,10 @@ var SITE_DATA = {
       section:'cottages',
       type:'village',
       name:'Посёлок «Новая Рублёвочка»',
+      // название для заявок; на карусели вместо него картинка-логотип
       logo:'Новая Рублёвочка',
-      addr:'п. Голубево, Гурьевский район',
+      logoImg:'photos/novrublevochka-logo.png',
+      addr:'п. Голубево, ул. Кофейная, 2',
       clsLabel:'Коттеджный посёлок',
       deadlineShort:'6 типов домов',
       priceFrom:11000000,
@@ -454,7 +456,9 @@ var SITE_DATA = {
         'photos/novrublevochka-1.jpg',
         'photos/novrublevochka-2.jpg',
         'photos/novrublevochka-3.jpg',
-        'photos/novrublevochka-4.jpg'
+        'photos/novrublevochka-4.jpg',
+        'photos/novrublevochka-5.jpg',
+        'photos/novrublevochka-6.jpg'
       ],
       headline:'6 типов домов',
       perks:[
