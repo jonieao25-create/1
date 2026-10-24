@@ -505,6 +505,10 @@
     <div class="v-perks" id="vPerks"></div>
     <div class="v-tagline" id="vTagline"></div>
     <div class="v-houses" id="vHouses"></div>
+    <div id="vMapSection" hidden>
+      <h2 class="v-green">Расположение</h2>
+      <div id="vMap" style="margin-top:14px"></div>
+    </div>
     <p class="v-lead" id="vCondLead"></p>
     <h2 class="v-green" id="vCondTitle"></h2>
     <div class="v-conds" id="vConds"></div>
@@ -773,23 +777,8 @@
       return '<span class="chip">'+ICON_CHECK+x+'</span>';
     }).join('');
 
-    // Карта Яндекса (если в data.js у ЖК есть map). Метки — корпуса (виджет показывает их без номеров).
-    var mapEl = document.getElementById('dMap');
-    mapEl.innerHTML = '';
-    if (c.map && c.map.points && c.map.points.length){
-      var pts = c.map.points, lat = 0, lon = 0;
-      pts.forEach(function(p){ lat += p.lat; lon += p.lon; });
-      lat = (lat/pts.length).toFixed(6); lon = (lon/pts.length).toFixed(6);
-      var z = c.map.z || 16;
-      var pt = pts.map(function(p){ return p.lon+','+p.lat; }).join('~');
-      var q = 'll='+lon+','+lat+'&z='+z+'&pt='+pt;
-      var openUrl = 'https://yandex.ru/maps/?'+q;
-      mapEl.innerHTML = '<div class="map-box"><iframe src="https://yandex.ru/map-widget/v1/?'+q+'" loading="lazy" allowfullscreen title="Карта"></iframe></div>'
-        + '<button type="button" class="map-open"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Открыть в Яндекс Картах</button>';
-      mapEl.querySelector('.map-open').onclick = function(){
-        if (TG && TG.openLink) TG.openLink(openUrl); else window.open(openUrl, '_blank');
-      };
-    }
+    // Карта Яндекса (если в data.js у ЖК есть map)
+    renderMap(document.getElementById('dMap'), c.map);
 
     var dist = document.getElementById('dDistances');
     dist.innerHTML = c.distances.map(function(d){
@@ -934,6 +923,10 @@
       list.appendChild(cp);
     }
 
+    // Карта посёлка (если в data.js у посёлка есть map)
+    renderMap(document.getElementById('vMap'), c.map);
+    document.getElementById('vMapSection').hidden = !(c.map && c.map.points && c.map.points.length);
+
     document.getElementById('vCondLead').textContent = c.conditionsLead || '';
     document.getElementById('vCondTitle').textContent = c.conditionsTitle || 'Условия покупки';
     document.getElementById('vConds').innerHTML = (c.conditions || []).map(function(x){
@@ -955,6 +948,26 @@
     viewVillage.hidden = false;
     window.scrollTo(0, 0);
     fitTagline();
+  }
+
+  // Карта Яндекса: блок с картой + кнопка «Открыть в Яндекс Картах».
+  // m = {z, points:[{lat,lon}]} из data.js. Метки виджет показывает без номеров.
+  function renderMap(mapEl, m){
+    mapEl.innerHTML = '';
+    if (m && m.points && m.points.length){
+      var pts = m.points, lat = 0, lon = 0;
+      pts.forEach(function(p){ lat += p.lat; lon += p.lon; });
+      lat = (lat/pts.length).toFixed(6); lon = (lon/pts.length).toFixed(6);
+      var z = m.z || 16;
+      var pt = pts.map(function(p){ return p.lon+','+p.lat; }).join('~');
+      var q = 'll='+lon+','+lat+'&z='+z+'&pt='+pt;
+      var openUrl = 'https://yandex.ru/maps/?'+q;
+      mapEl.innerHTML = '<div class="map-box"><iframe src="https://yandex.ru/map-widget/v1/?'+q+'" loading="lazy" allowfullscreen title="Карта"></iframe></div>'
+        + '<button type="button" class="map-open"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Открыть в Яндекс Картах</button>';
+      mapEl.querySelector('.map-open').onclick = function(){
+        if (TG && TG.openLink) TG.openLink(openUrl); else window.open(openUrl, '_blank');
+      };
+    }
   }
 
   function renderTabs(c){
