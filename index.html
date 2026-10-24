@@ -268,6 +268,12 @@
   .feature{display:flex; gap:10px; align-items:flex-start; font-size:13.5px; line-height:1.4}
   .feature svg{flex:none; margin-top:2px; color:var(--accent)}
 
+  .map-box{border-radius:16px; overflow:hidden; border:1px solid var(--border); background:var(--bg-elevated); margin-bottom:10px}
+  .map-box iframe{display:block; width:100%; height:260px; border:0}
+  .map-open{display:flex; align-items:center; justify-content:center; gap:8px; width:100%; margin-bottom:12px;
+    padding:11px 14px; border-radius:12px; border:1px solid var(--border); background:var(--bg-elevated); color:var(--fg);
+    font:inherit; font-size:13.5px; font-weight:600; cursor:pointer}
+  .map-open svg{color:#fc3f1d}
   .distances{display:flex; flex-direction:column; gap:8px}
   .dist-row{display:flex; justify-content:space-between; font-size:13px; padding:9px 0; border-bottom:1px solid var(--border)}
   .dist-row:last-child{border-bottom:none}
@@ -454,6 +460,7 @@
 
     <div class="section" id="dDistSection">
       <div class="section-title">Расположение</div>
+      <div id="dMap"></div>
       <div class="distances" id="dDistances"></div>
     </div>
 
@@ -764,6 +771,24 @@
     cond.innerHTML = c.conditions.map(function(x){
       return '<span class="chip">'+ICON_CHECK+x+'</span>';
     }).join('');
+
+    // Карта Яндекса (если в data.js у ЖК есть map). Метки — корпуса (виджет показывает их без номеров).
+    var mapEl = document.getElementById('dMap');
+    mapEl.innerHTML = '';
+    if (c.map && c.map.points && c.map.points.length){
+      var pts = c.map.points, lat = 0, lon = 0;
+      pts.forEach(function(p){ lat += p.lat; lon += p.lon; });
+      lat = (lat/pts.length).toFixed(6); lon = (lon/pts.length).toFixed(6);
+      var z = c.map.z || 16;
+      var pt = pts.map(function(p){ return p.lon+','+p.lat; }).join('~');
+      var q = 'll='+lon+','+lat+'&z='+z+'&pt='+pt;
+      var openUrl = 'https://yandex.ru/maps/?'+q;
+      mapEl.innerHTML = '<div class="map-box"><iframe src="https://yandex.ru/map-widget/v1/?'+q+'" loading="lazy" allowfullscreen title="Карта"></iframe></div>'
+        + '<button type="button" class="map-open"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Открыть в Яндекс Картах</button>';
+      mapEl.querySelector('.map-open').onclick = function(){
+        if (TG && TG.openLink) TG.openLink(openUrl); else window.open(openUrl, '_blank');
+      };
+    }
 
     var dist = document.getElementById('dDistances');
     dist.innerHTML = c.distances.map(function(d){
