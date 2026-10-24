@@ -474,7 +474,7 @@ var SITE_DATA = {
       id:'simfoniya',
       section:'coast',
       name:'ЖК «Симфония моря»',
-      addr:'пос. Рыбное, Пионерский округ',
+      addr:'пос. Рыбное',
       cls:'comfort',
       clsLabel:'Рыбное',
       deadline:'дома сданы, ключи с 3 кв. 2026',
