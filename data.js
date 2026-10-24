@@ -274,7 +274,9 @@ var SITE_DATA = {
         'photos/venecianskiy-1.jpg',
         'photos/venecianskiy-2.jpg',
         'photos/venecianskiy-3.jpg',
-        'photos/venecianskiy-4.jpg'
+        'photos/venecianskiy-4.jpg',
+        'photos/venecianskiy-5.jpg',
+        'photos/venecianskiy-6.jpg'
       ],
       quick:[
         {v:'9', l:'этажей'},
@@ -324,7 +326,9 @@ var SITE_DATA = {
         'photos/kronyivolny-1.jpg',
         'photos/kronyivolny-2.jpg',
         'photos/kronyivolny-3.jpg',
-        'photos/kronyivolny-4.jpg'
+        'photos/kronyivolny-4.jpg',
+        'photos/kronyivolny-5.jpg',
+        'photos/kronyivolny-6.jpg'
       ],
       quick:[
         {v:'4', l:'этажа'},
@@ -374,7 +378,10 @@ var SITE_DATA = {
       artHue:'var(--accent-soft)',
       photos:[
         'photos/rechnoy-1.jpg',
-        'photos/rechnoy-2.jpg'
+        'photos/rechnoy-2.jpg',
+        'photos/rechnoy-3.jpg',
+        'photos/rechnoy-4.jpg',
+        'photos/rechnoy-5.jpg'
       ],
       quick:[
         {v:'5', l:'этажей'},
