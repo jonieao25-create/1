@@ -951,8 +951,7 @@
   }
 
   // Карта Яндекса: блок с картой + кнопка «Открыть в Яндекс Картах».
-  // m = {z, icon, points:[{lat,lon}]} из data.js. icon — стиль метки Яндекса (например pm2orl — оранжевая).
-  // Метки виджет показывает без номеров.
+  // m = {z, points:[{lat,lon}]} из data.js. Метки виджет показывает без номеров.
   function renderMap(mapEl, m){
     mapEl.innerHTML = '';
     if (m && m.points && m.points.length){
@@ -960,7 +959,7 @@
       pts.forEach(function(p){ lat += p.lat; lon += p.lon; });
       lat = (lat/pts.length).toFixed(6); lon = (lon/pts.length).toFixed(6);
       var z = m.z || 16;
-      var pt = pts.map(function(p){ return p.lon+','+p.lat+(m.icon ? ','+m.icon : ''); }).join('~');
+      var pt = pts.map(function(p){ return p.lon+','+p.lat; }).join('~');
       var q = 'll='+lon+','+lat+'&z='+z+'&pt='+pt;
       var openUrl = 'https://yandex.ru/maps/?'+q;
       mapEl.innerHTML = '<div class="map-box"><iframe src="https://yandex.ru/map-widget/v1/?'+q+'" loading="lazy" allowfullscreen title="Карта"></iframe></div>'
