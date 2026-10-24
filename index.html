@@ -1,5 +1,6 @@
 <meta charset="utf-8">
-<meta name="claude:viewport-fit-sides" content="cover">
+<!-- ширина страницы = ширина телефона; viewport-fit=cover включает отступы под вырез и полоску айфона -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Новостройки Калининграда</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="data.js" charset="utf-8"></script>
@@ -283,7 +284,7 @@
   .cta-space{height:92px}
   .cta-bar{
     position:fixed; left:0; right:0; bottom:0; z-index:6;
-    padding:12px max(16px, env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px, env(safe-area-inset-left,0px));
+    padding:12px max(16px, env(safe-area-inset-right,0px)) calc(12px + max(env(safe-area-inset-bottom,0px), var(--tg-safe-area-inset-bottom,0px))) max(16px, env(safe-area-inset-left,0px));
     background:var(--bg); border-top:1px solid var(--border);
   }
   .cta-inner{max-width:480px; margin:0 auto}
@@ -309,7 +310,7 @@
   .field label{font-size:12px; color:var(--fg-muted); font-weight:600}
   .field input{
     padding:12px 13px; border-radius:11px; border:1px solid var(--border); background:var(--bg);
-    color:var(--fg); font-size:15px; font-family:inherit;
+    color:var(--fg); font-size:16px; font-family:inherit; /* 16px: иначе айфон приближает экран */
   }
   .phone-wrap{
     display:flex; align-items:stretch; border:1px solid var(--border);
@@ -317,12 +318,12 @@
   }
   .phone-wrap:focus-within{border-color:var(--accent)}
   .phone-prefix{
-    display:flex; align-items:center; padding:0 11px 0 13px; font-size:15px; font-weight:700;
+    display:flex; align-items:center; padding:0 11px 0 13px; font-size:16px; font-weight:700;
     color:var(--fg); background:var(--bg-elevated); border-right:1px solid var(--border);
   }
   .phone-wrap input{
     flex:1; min-width:0; border:none; background:transparent; border-radius:0;
-    padding:12px 13px; color:var(--fg); font-size:15px; font-family:inherit;
+    padding:12px 13px; color:var(--fg); font-size:16px; font-family:inherit;
   }
   .phone-wrap input:focus{outline:none}
 
