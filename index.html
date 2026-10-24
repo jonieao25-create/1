@@ -348,11 +348,12 @@
   .v-arrow{position:absolute; top:50%; transform:translateY(-50%); width:34px; height:34px; border-radius:50%; border:0; background:rgba(255,255,255,.85); color:#1C2321; display:grid; place-items:center; cursor:pointer}
   .v-arrow.prev{left:10px} .v-arrow.next{right:10px}
   .v-green{background:var(--accent); color:var(--accent-ink); border-radius:16px; padding:18px; text-align:center; font:800 22px/1.2 'Unbounded', 'Arial Black', sans-serif; text-transform:uppercase; letter-spacing:.02em; margin:0}
-  .v-perks{display:grid; grid-template-columns:1fr 1fr; gap:10px}
-  .v-perk{background:#fff; border-radius:14px; padding:14px; display:flex; flex-direction:column; gap:10px; min-width:0}
+  .v-perks{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+  /* иконка слева, текст справа, в одну строку */
+  .v-perk{background:#fff; border-radius:12px; padding:9px 10px 9px 8px; display:flex; align-items:center; gap:6px; min-width:0; min-height:54px}
   .v-perk.wide{grid-column:1/-1}
-  .v-perk .ic{width:44px; height:44px; border-radius:10px; background:#463936; color:#fff; display:grid; place-items:center}
-  .v-perk .tx{color:#463936; font:800 12.5px/1.3 'Unbounded', 'Arial Black', sans-serif; text-transform:uppercase; letter-spacing:.02em}
+  .v-perk .ic{flex:none; width:28px; height:28px; border-radius:7px; background:#463936; color:#fff; display:grid; place-items:center}
+  .v-perk .tx{flex:1; min-width:0; color:#463936; font:800 9.5px/1.3 'Unbounded', 'Arial Black', sans-serif; text-transform:uppercase; letter-spacing:-.01em}
   .v-tagline{background:var(--bg-elevated); border-radius:16px; padding:18px 14px; text-align:center; font-family:'Unbounded', 'Arial Black', sans-serif; font-weight:800; text-transform:uppercase; line-height:1.15}
   .v-tagline span{display:table; margin:0 auto; white-space:nowrap}
   .v-houses{display:flex; flex-direction:column; gap:22px; padding-top:6px}
@@ -804,6 +805,16 @@
     sea:'<path d="M3 17c2 0 2-1.5 4.5-1.5S9.5 17 12 17s2.5-1.5 4.5-1.5S19 17 21 17v3H3z" fill="currentColor"/><path d="M5 14c0-5 4-9 9-9 2.5 0 4 1.5 4 3.5-2-1-4.5 0-4.5 2.5 0 1.5 1 2.5 2.5 3" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>'
   };
 
+  // если длинное слово не влезает в плашку удобства, чуть уменьшаем шрифт только у этой плашки
+  function fitPerks(){
+    document.querySelectorAll('#vPerks .tx').forEach(function(t){
+      var size = 9.5; t.style.fontSize = size + 'px';
+      while (t.scrollWidth > t.clientWidth && size > 7.5){ size -= 0.25; t.style.fontSize = size + 'px'; }
+    });
+  }
+  if (document.fonts) document.fonts.ready.then(fitPerks);
+  window.addEventListener('resize', fitPerks);
+
   function esc(s){
     return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
@@ -863,9 +874,10 @@
 
     document.getElementById('vPerks').innerHTML = (c.perks || []).map(function(p){
       return '<div class="v-perk' + (p.wide ? ' wide' : '') + '">'
-        + '<div class="ic"><svg width="26" height="26" viewBox="0 0 24 24">' + (PERK_ICONS[p.icon] || PERK_ICONS.city) + '</svg></div>'
+        + '<div class="ic"><svg width="17" height="17" viewBox="0 0 24 24">' + (PERK_ICONS[p.icon] || PERK_ICONS.city) + '</svg></div>'
         + '<div class="tx">' + esc(p.text) + '</div></div>';
     }).join('');
+    fitPerks(); requestAnimationFrame(fitPerks);
 
     var tag = document.getElementById('vTagline');
     tag.innerHTML = (c.tagline || []).map(function(s){ return '<span>' + esc(s) + '</span>'; }).join('');
