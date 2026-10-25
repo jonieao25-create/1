@@ -836,16 +836,50 @@ var SITE_DATA = {
       ],
       // крупная надпись на всю ширину плашки; каждая строка — отдельно
       tagline:['Ваш будущий дом', 'уже построен', 'и ждёт вас'],
+      // houseButtons:true — под крупной фразой кнопки с названиями домов
+      houseButtons:true,
       // карточки домов. price — текстом, как показать на карточке
-      // plan — картинка планировки дома (необязательно; нет plan — нет планировки)
+      // Для страницы дома (кнопка «Подробнее о доме»), всё необязательно:
+      //   photos — фото дома (листаются), rooms — площади помещений,
+      //   plans — планировки (если несколько — «Вариант 1, 2, 3»)
+      // Источник: rodnikipark.ru, страницы домов, 25 октября 2026.
       houses:[
-        {name:'Лекса',  photo:'photos/rodniki-lexa.jpg',  area:'102', bedrooms:'2', plot:'6,5–8,5', price:'от 10,8 млн ₽', plan:'photos/rodniki-plan-lexa.jpg'},
-        {name:'Ультра', photo:'photos/rodniki-ultra.jpg', area:'106', bedrooms:'2', plot:'6,5–8,5', price:'от 10,8 млн ₽'},
-        {name:'Сайма',  photo:'photos/rodniki-saima.jpg', area:'117', bedrooms:'3', plot:'6,5–8,5', price:'от 11,8 млн ₽'},
-        {name:'Пания',  photo:'photos/rodniki-pania.jpg', area:'142', bedrooms:'3', plot:'7,5–10',  price:'от 14,75 млн ₽', plan:'photos/rodniki-plan-pania.jpg'},
-        {name:'Мурей',  photo:'photos/rodniki-myrey.jpg', area:'146', bedrooms:'3', plot:'7,5–10',  price:'от 15,15 млн ₽'},
-        {name:'Микеа',  photo:'photos/rodniki-mikea.jpg', area:'130', bedrooms:'3', plot:'6,5–8,5', price:'от 14 млн ₽', plan:'photos/rodniki-plan-mikea.jpg'},
-        {name:'Талма',  photo:'photos/rodniki-talma.jpg', area:'142', bedrooms:'3', plot:'7,5–10',  price:'Цена по запросу'}
+        {name:'Лекса',  photo:'photos/rodniki-lexa.jpg',  area:'102', bedrooms:'2', plot:'6,5–8,5', price:'от 10,8 млн ₽',
+          photos:['photos/rodniki-lexa-1.jpg', 'photos/rodniki-lexa-2.jpg'],
+          rooms:[{l:'Кухня-гостиная', v:'45,81'}, {l:'Спальня 1', v:'14,73'}, {l:'Спальня 2', v:'11,18'}, {l:'Ванная 1', v:'5,58'}, {l:'Ванная 2', v:'7,03'}, {l:'Терраса', v:'15,22'}],
+          plans:['photos/rodniki-plan-lexa.jpg']},
+        {name:'Ультра', photo:'photos/rodniki-ultra.jpg', area:'106', bedrooms:'2', plot:'6,5–8,5', price:'от 10,8 млн ₽',
+          photos:['photos/rodniki-ultra-1.jpg', 'photos/rodniki-ultra-2.jpg'],
+          rooms:[{l:'Кухня-гостиная', v:'35,07'}, {l:'Спальня 1', v:'12,59'}, {l:'Спальня 2', v:'11,41'}, {l:'Ванная', v:'6,28'}, {l:'Гардеробная', v:'2,64'}, {l:'Терраса', v:'18'}],
+          plans:['photos/rodniki-plan-ultra.jpg']},
+        {name:'Сайма',  photo:'photos/rodniki-saima.jpg', area:'117', bedrooms:'3', plot:'6,5–8,5', price:'от 11,8 млн ₽',
+          photos:['photos/rodniki-saima-1.jpg', 'photos/rodniki-saima-2.jpg'],
+          rooms:[{l:'Кухня-гостиная', v:'42,97'}, {l:'Спальня 1', v:'18,55'}, {l:'Спальня 2', v:'13,54'}, {l:'Спальня 3', v:'13,07'}, {l:'Ванные', v:'4,2 / 4,16'}, {l:'Терраса', v:'18'}],
+          plans:['photos/rodniki-plan-saima.jpg']},
+        {name:'Пания',  photo:'photos/rodniki-pania.jpg', area:'142', bedrooms:'3', plot:'7,5–10',  price:'от 14,75 млн ₽',
+          photos:['photos/rodniki-pania-1.jpg', 'photos/rodniki-pania-2.jpg'],
+          rooms:[{l:'Кухня-гостиная', v:'49,36'}, {l:'Спальня 1', v:'19,83'}, {l:'Спальня 2', v:'13,7'}, {l:'Спальня 3', v:'12,14'}, {l:'Ванные', v:'7,25 / 4,42'}, {l:'Терраса', v:'18'}],
+          plans:['photos/rodniki-plan-pania.jpg']},
+        {name:'Мурей',  photo:'photos/rodniki-myrey.jpg', area:'146', bedrooms:'3', plot:'7,5–10',  price:'от 15,15 млн ₽',
+          photos:['photos/rodniki-myrey-1.jpg', 'photos/rodniki-myrey-2.jpg'],
+          rooms:[{l:'Кухня-гостиная', v:'42,17'}, {l:'Спальня 1', v:'13,77'}, {l:'Спальня 2', v:'13,74'}, {l:'Спальня 3', v:'14,86'}, {l:'Ванные', v:'5,30 / 5,13'}, {l:'Терраса', v:'18'}],
+          plans:['photos/rodniki-plan-myrey.jpg', 'photos/rodniki-plan-myrey-2.jpg', 'photos/rodniki-plan-myrey-3.jpg']},
+        {name:'Микеа',  photo:'photos/rodniki-mikea.jpg', area:'130', bedrooms:'3', plot:'6,5–8,5', price:'от 14 млн ₽',
+          photos:['photos/rodniki-mikea-1.jpg', 'photos/rodniki-mikea-2.jpg'],
+          rooms:[{l:'Кухня-гостиная', v:'33,51'}, {l:'Спальня 1', v:'15,85'}, {l:'Спальня 2', v:'10,77'}, {l:'Спальня 3', v:'11,51'}, {l:'Ванные', v:'6,1 / 6,93'}, {l:'Терраса', v:'18'}],
+          plans:['photos/rodniki-plan-mikea.jpg', 'photos/rodniki-plan-mikea-2.jpg']},
+        {name:'Талма',  photo:'photos/rodniki-talma.jpg', area:'142', bedrooms:'3', plot:'7,5–10',  price:'Цена по запросу',
+          photos:['photos/rodniki-talma-1.jpg', 'photos/rodniki-talma-2.jpg'],
+          rooms:[{l:'Кухня-гостиная', v:'43,3'}, {l:'Спальня 1', v:'12,74'}, {l:'Спальня 2', v:'13,35'}, {l:'Спальня 3', v:'12,25'}, {l:'Ванные', v:'5,55 / 5,02'}, {l:'Терраса', v:'17'}, {l:'Гараж', v:'30'}],
+          plans:['photos/rodniki-plan-talma.jpg', 'photos/rodniki-plan-talma-2.jpg']}
+      ],
+      // «Как построен дом» на странице каждого дома (одинаково для всех домов посёлка)
+      houseSpecs:[
+        {title:'Фундамент и водоотведение', items:['Ленточный фундамент с монолитной плитой', 'Отмостка с покрытием тротуарной плиткой', 'Дренаж фундамента по периметру', 'Ливнёвая канализация с дождеприёмными колодцами по периметру']},
+        {title:'Кровля', items:['Фальцевая матовая кровля, цвет RAL 7016', 'Усиленная стропильная система из сухой антисептированной доски хвойных пород 1 сорта', 'Утеплитель: минераловатные плиты 150 мм']},
+        {title:'Стены, полы и отделка', items:['Наружные и несущие стены: газосиликатный блок «Аэроблок» 300 мм, D500', 'Перегородки: газосиликатный блок 100 мм', 'Полы: утеплитель 100 мм, стяжка, водяной тёплый пол', 'Фасад: штукатурка с декоративными элементами из дерева, утеплитель 80 мм', 'Внутри: оштукатуренные стены']},
+        {title:'Благоустройство', items:['Терраса: по желанию', 'Парковка на 2 автомобиля и дорожка к дому из тротуарной плитки', 'Спереди забор «ранчо» с откатными воротами и калиткой', 'Между соседями забор из 3D-панелей']},
+        {title:'Коммуникации', items:['Центральный водопровод', 'Центральный газ с подключением к дому (котёл)', 'Электричество: кабель до щита в доме', 'Канализация: локальные очистные сооружения, очистка 98–99%']}
       ],
       // последняя карточка без фото. Чтобы убрать — удалите блок customProject
       customProject:{

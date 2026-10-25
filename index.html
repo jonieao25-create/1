@@ -373,7 +373,35 @@
   .v-house .facts{font-size:16px; line-height:1.55}
   .v-house .price{font:800 19px 'Unbounded', 'Arial Black', sans-serif}
   .v-house .note{align-self:flex-start; background:var(--accent-soft); border-radius:8px; padding:6px 10px; font-size:14px; font-weight:700}
-  /* планировка дома в карточке посёлка (houses[].plan в data.js) */
+  /* кнопки домов под крупной фразой посёлка */
+  .v-hbtns{display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px}
+  .v-hbtn{border:0; border-radius:12px; background:#fff; color:#463936; min-height:52px; padding:10px 12px; display:flex; align-items:center; justify-content:space-between; gap:6px; font:800 12px/1.25 'Unbounded', 'Arial Black', sans-serif; text-transform:uppercase; text-align:left; cursor:pointer}
+  .v-hbtn::after{content:'→'; flex:none; font-size:15px; color:var(--accent)}
+  .v-hbtn.wide{grid-column:1/-1}
+  .v-hbtn.long{font-size:10px; letter-spacing:-.02em}
+  .v-house .v-more{align-self:flex-start; border:0; background:none; padding:2px 0; color:var(--accent); font:inherit; font-size:15px; font-weight:700; cursor:pointer}
+
+  /* ===== страница дома в посёлке ===== */
+  #view-house{display:flex; flex-direction:column; gap:14px; padding-bottom:28px}
+  #view-house[hidden]{display:none}
+  #view-house [hidden], .v-hbtns[hidden]{display:none !important}
+  .h-title{margin:2px 0 0; font:800 26px/1.1 'Unbounded', 'Arial Black', sans-serif; text-transform:uppercase}
+  .h-price{font:800 21px 'Unbounded', 'Arial Black', sans-serif}
+  .h-facts{display:flex; flex-wrap:wrap; gap:6px}
+  .h-facts span{font-size:13px; font-weight:700; padding:6px 11px; border-radius:999px; background:var(--accent-soft)}
+  .h-sub{margin:6px 0 0; font:800 15px 'Unbounded', 'Arial Black', sans-serif; text-transform:uppercase}
+  .h-rooms{display:flex; flex-direction:column; border:1px solid var(--border); border-radius:14px; overflow:hidden; background:var(--bg-elevated)}
+  .h-tabs{display:flex; gap:6px; flex-wrap:wrap}
+  .h-tab{border:1px solid var(--border); background:var(--bg-elevated); color:var(--fg); border-radius:999px; padding:7px 13px; font:inherit; font-size:13px; font-weight:700; cursor:pointer}
+  .h-tab.on{background:var(--accent); border-color:var(--accent); color:var(--accent-ink)}
+  .h-spec{border:1px solid var(--border); border-radius:14px; background:var(--bg-elevated); overflow:hidden}
+  .h-spec summary{list-style:none; cursor:pointer; padding:13px 14px; font-weight:700; font-size:14px; display:flex; justify-content:space-between; gap:10px}
+  .h-spec summary::-webkit-details-marker{display:none}
+  .h-spec summary::after{content:'+'; font-size:18px; line-height:1; color:var(--accent)}
+  .h-spec[open] summary::after{content:'−'}
+  .h-spec ul{margin:0; padding:0 14px 13px 30px; font-size:13.5px; line-height:1.5; color:var(--fg-muted)}
+
+  /* планировка дома в карточке посёлка (houses[].plans в data.js) */
   .v-plan{display:block; width:100%; border:1px solid var(--border); border-radius:14px; background:#fff; padding:10px; cursor:zoom-in}
   .v-plan img{display:block; width:100%; max-height:340px; object-fit:contain}
   .v-plan-hint{font-size:12px; color:var(--fg-muted); text-align:center; margin-top:-4px}
@@ -511,6 +539,7 @@
     <div class="v-green" id="vHeadline"></div>
     <div class="v-perks" id="vPerks"></div>
     <div class="v-tagline" id="vTagline"></div>
+    <div class="v-hbtns" id="vHouseBtns"></div>
     <div class="v-houses" id="vHouses"></div>
     <div id="vMapSection" hidden>
       <h2 class="v-green">Расположение</h2>
@@ -520,6 +549,47 @@
     <h2 class="v-green" id="vCondTitle"></h2>
     <div class="v-conds" id="vConds"></div>
     <button class="v-btn center" type="button" id="vConsult"></button>
+  </section>
+
+  <!-- ===== HOUSE (страница одного дома в посёлке) ===== -->
+  <section id="view-house" hidden>
+    <div class="topbar">
+      <button class="back-btn" id="hBackBtn" aria-label="Назад к посёлку">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div>
+        <div class="topbar-title" id="hTopTitle">—</div>
+        <div class="topbar-sub" id="hTopSub">—</div>
+      </div>
+    </div>
+    <div class="v-hero">
+      <div class="v-slides" id="hSlides"></div>
+      <span class="v-count" id="hCount"></span>
+      <button class="v-arrow prev" id="hPrev" type="button" aria-label="Предыдущее фото">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="v-arrow next" id="hNext" type="button" aria-label="Следующее фото">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+    <h2 class="h-title" id="hTitle"></h2>
+    <div class="h-price" id="hPrice"></div>
+    <div class="h-facts" id="hFacts"></div>
+    <div id="hRoomsBox">
+      <h3 class="h-sub">Площади помещений</h3>
+      <div class="h-rooms" id="hRooms" style="margin-top:10px"></div>
+    </div>
+    <div id="hPlanBox" style="display:flex; flex-direction:column; gap:10px">
+      <h3 class="h-sub">Планировка</h3>
+      <div class="h-tabs" id="hPlanTabs"></div>
+      <button class="v-plan" type="button" id="hPlan" aria-label="Увеличить планировку"><img alt="Планировка"></button>
+      <div class="v-plan-hint">Нажмите на план, чтобы увеличить</div>
+    </div>
+    <div id="hSpecsBox" style="display:flex; flex-direction:column; gap:8px">
+      <h3 class="h-sub">Как построен дом</h3>
+      <div id="hSpecs" style="display:flex; flex-direction:column; gap:8px"></div>
+    </div>
+    <button class="v-btn center" type="button" id="hLead">Оставить заявку на этот дом →</button>
   </section>
 
   <footer class="app-foot">Актуальность цен и наличие узнавайте у агента. Источник: открытые страницы застройщиков</footer>
@@ -907,7 +977,9 @@
 
     var list = document.getElementById('vHouses');
     list.innerHTML = '';
+    var cards = [];
     (c.houses || []).forEach(function(h){
+      var plan0 = housePlans(h)[0];
       var el = document.createElement('div');
       el.className = 'v-house';
       el.innerHTML = '<div class="v-house-photo" style="background-image:url(\'' + h.photo + '\')"></div>'
@@ -915,13 +987,17 @@
         + '<div class="facts">Общая площадь ' + esc(h.area) + ' кв.м.' + (h.bedrooms ? '<br>Спальни ' + esc(h.bedrooms) : '') + (h.plot ? '<br>Участок ' + esc(h.plot) + ' соток' : '') + '</div>'
         + (h.price ? '<div class="price">' + esc(h.price) + '</div>' : '')
         + (h.note ? '<div class="note">' + esc(h.note) + '</div>' : '')
-        + (h.plan ? '<button class="v-plan" type="button" aria-label="Увеличить планировку"><img src="' + esc(h.plan) + '" alt="Планировка дома ' + esc(h.name) + '" loading="lazy"></button>'
+        + (plan0 ? '<button class="v-plan" type="button" aria-label="Увеличить планировку"><img src="' + esc(plan0) + '" alt="Планировка дома ' + esc(h.name) + '" loading="lazy"></button>'
           + '<div class="v-plan-hint">Планировка. Нажмите, чтобы увеличить</div>' : '')
+        + (hasPage(h) ? '<button class="v-more" type="button">Подробнее о доме →</button>' : '')
         + '<button class="v-btn" type="button">Оставить заявку →</button>';
       el.querySelector('.v-btn').addEventListener('click', function(){ openLeadForm(lead('дом ' + h.name)); });
       var pl = el.querySelector('.v-plan');
-      if (pl) pl.addEventListener('click', function(){ openHousePlan(h.plan); });
+      if (pl) pl.addEventListener('click', function(){ openHousePlan(plan0); });
+      var more = el.querySelector('.v-more');
+      if (more) more.addEventListener('click', function(){ openHouse(c, h); });
       list.appendChild(el);
+      cards.push(el);
     });
     if (c.customProject){
       var cp = document.createElement('div');
@@ -932,6 +1008,30 @@
         + '<button class="v-btn" type="button">Оставить заявку →</button>';
       cp.querySelector('button').addEventListener('click', function(){ openLeadForm(lead('индивидуальный проект')); });
       list.appendChild(cp);
+    }
+
+    // Кнопки с названиями домов под крупной фразой (houseButtons:true в data.js).
+    // Дом со страницей открывает её, остальное листает к своей карточке ниже.
+    var hb = document.getElementById('vHouseBtns');
+    hb.innerHTML = '';
+    hb.hidden = !c.houseButtons;
+    if (c.houseButtons){
+      (c.houses || []).forEach(function(h, i){
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'v-hbtn'; b.textContent = h.name;
+        b.addEventListener('click', function(){
+          if (hasPage(h)) openHouse(c, h);
+          else cards[i].scrollIntoView({ behavior:'smooth', block:'start' });
+        });
+        hb.appendChild(b);
+      });
+      if (c.customProject){
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'v-hbtn' + ((c.houses || []).length % 2 ? '' : ' wide') + (c.customProject.title.length > 12 ? ' long' : '');
+        b.textContent = c.customProject.title;
+        b.addEventListener('click', function(){ cp.scrollIntoView({ behavior:'smooth', block:'start' }); });
+        hb.appendChild(b);
+      }
     }
 
     // Карта посёлка (если в data.js у посёлка есть map)
@@ -956,10 +1056,92 @@
     ctaBar.hidden = true;
     viewHome.hidden = true;
     viewDetail.hidden = true;
+    viewHouse.hidden = true;
     viewVillage.hidden = false;
     window.scrollTo(0, 0);
     fitTagline();
   }
+
+  // ---------- страница дома в посёлке ----------
+  var viewHouse = document.getElementById('view-house');
+  var hSlides = document.getElementById('hSlides');
+  var villageScroll = 0;
+
+  // plans — список вариантов; старое поле plan тоже понимаем
+  function housePlans(h){ return h.plans || (h.plan ? [h.plan] : []); }
+  // своя страница есть, если у дома есть фото, помещения или планировки
+  function hasPage(h){ return !!((h.photos && h.photos.length) || (h.rooms && h.rooms.length) || housePlans(h).length > 1); }
+
+  function hIndex(){ return Math.round(hSlides.scrollLeft / (hSlides.clientWidth || 1)); }
+  hSlides.addEventListener('scroll', function(){
+    var n = hSlides.children.length;
+    document.getElementById('hCount').textContent = n ? (hIndex() + 1) + '/' + n : '';
+  });
+  function hStep(d){
+    var i = Math.min(Math.max(hIndex() + d, 0), hSlides.children.length - 1);
+    hSlides.scrollTo({ left: i * hSlides.clientWidth, behavior: 'smooth' });
+  }
+  document.getElementById('hPrev').addEventListener('click', function(){ hStep(-1); });
+  document.getElementById('hNext').addEventListener('click', function(){ hStep(1); });
+  document.getElementById('hBackBtn').addEventListener('click', backToVillage);
+
+  function openHouse(c, h){
+    var short = c.logo || c.name;
+    villageScroll = window.scrollY;
+    document.getElementById('hTopTitle').textContent = 'Дом «' + h.name + '»';
+    document.getElementById('hTopSub').textContent = c.name;
+
+    var photos = (h.photos && h.photos.length) ? h.photos : [h.photo];
+    hSlides.innerHTML = photos.map(function(p){ return '<div class="v-slide" style="background-image:url(\'' + p + '\')"></div>'; }).join('');
+    hSlides.scrollLeft = 0;
+    document.getElementById('hCount').textContent = '1/' + photos.length;
+    document.getElementById('hPrev').hidden = document.getElementById('hNext').hidden = photos.length < 2;
+
+    document.getElementById('hTitle').textContent = h.name;
+    document.getElementById('hPrice').textContent = h.price || '';
+    document.getElementById('hFacts').innerHTML = [
+      h.area ? h.area + ' м²' : '', h.bedrooms ? 'спальни: ' + h.bedrooms : '', h.plot ? 'участок ' + h.plot + ' сот.' : ''
+    ].filter(Boolean).map(function(s){ return '<span>' + esc(s) + '</span>'; }).join('');
+
+    var rooms = h.rooms || [];
+    document.getElementById('hRoomsBox').hidden = !rooms.length;
+    document.getElementById('hRooms').innerHTML = rooms.map(function(r){
+      return '<div class="spec-row"><span class="l">' + esc(r.l) + '</span><span class="v">' + esc(r.v) + ' м²</span></div>';
+    }).join('');
+
+    var plans = housePlans(h), planBtn = document.getElementById('hPlan'), tabs = document.getElementById('hPlanTabs');
+    document.getElementById('hPlanBox').hidden = !plans.length;
+    function showPlan(i){
+      planBtn.querySelector('img').src = plans[i];
+      planBtn.onclick = function(){ openHousePlan(plans[i]); };
+      [].forEach.call(tabs.children, function(t, j){ t.classList.toggle('on', j === i); });
+    }
+    tabs.innerHTML = plans.length > 1 ? plans.map(function(_, i){ return '<button type="button" class="h-tab">Вариант ' + (i + 1) + '</button>'; }).join('') : '';
+    [].forEach.call(tabs.children, function(t, i){ t.addEventListener('click', function(){ showPlan(i); }); });
+    if (plans.length) showPlan(0);
+
+    // описание постройки общее для всех домов посёлка (houseSpecs в data.js)
+    var specs = c.houseSpecs || [];
+    document.getElementById('hSpecsBox').hidden = !specs.length;
+    document.getElementById('hSpecs').innerHTML = specs.map(function(s){
+      return '<details class="h-spec"><summary>' + esc(s.title) + '</summary><ul>'
+        + s.items.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></details>';
+    }).join('');
+
+    document.getElementById('hLead').onclick = function(){ openLeadForm({ name: 'посёлок ' + short + ', дом ' + h.name, room: '' }); };
+
+    viewVillage.hidden = true;
+    viewHouse.hidden = false;
+    window.scrollTo(0, 0);
+  }
+
+  function backToVillage(){
+    viewHouse.hidden = true;
+    viewVillage.hidden = false;
+    window.scrollTo(0, villageScroll);
+  }
+  // кнопка «Назад» Telegram: со страницы дома — в посёлок, иначе — на главную
+  function goBack(){ if (!viewHouse.hidden) backToVillage(); else goHome(); }
 
   // Карта Яндекса: блок с картой + кнопка «Открыть в Яндекс Картах».
   // m = {z, points:[{lat,lon}]} из data.js. Метки виджет показывает без номеров.
@@ -1029,6 +1211,7 @@
   function goHome(){
     viewDetail.hidden = true;
     viewVillage.hidden = true;
+    viewHouse.hidden = true;
     viewHome.hidden = false;
     ctaBar.hidden = true;
     window.scrollTo(0,0);
@@ -1183,7 +1366,7 @@
     if (TG.setBackgroundColor) { try { TG.setBackgroundColor('#F3F1EC'); } catch(e){} }
 
     if (TG.BackButton){
-      TG.BackButton.onClick(goHome);
+      TG.BackButton.onClick(goBack);
       TG.BackButton.hide();
     }
 
