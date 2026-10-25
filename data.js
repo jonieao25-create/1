@@ -357,9 +357,12 @@ var SITE_DATA = {
         {v:'6', l:'корпусов'}
       ],
       rooms:[
-        {key:'studio', label:'Студия', area:'от 21 м²', pricePerM2:'185 143 ₽', priceTotal:'от 3 888 000 ₽'},
-        {key:'1k', label:'1-комн.', area:'от 31.9 м²', pricePerM2:'162 296 ₽', priceTotal:'от 5 177 250 ₽'},
-        {key:'2k', label:'2-комн.', area:'от 44.8 м²', pricePerM2:'155 391 ₽', priceTotal:'от 6 961 500 ₽'},
+        {key:'studio', label:'Студия', area:'от 21 м²', pricePerM2:'185 143 ₽', priceTotal:'от 3 888 000 ₽',
+          plan:{img:'photos/kronyivolny-plan-st.jpg', area:'23.10', floor:'2/4', building:'3', flat:'20', deadline:'1 кв. 2028', price:'4 781 700 ₽'}},
+        {key:'1k', label:'1-комн.', area:'от 31.9 м²', pricePerM2:'162 296 ₽', priceTotal:'от 5 177 250 ₽',
+          plan:{img:'photos/kronyivolny-plan-1k.jpg', area:'43.30', floor:'2/4', building:'1', flat:'78', deadline:'1 кв. 2028', price:'6 430 050 ₽'}},
+        {key:'2k', label:'2-комн.', area:'от 44.8 м²', pricePerM2:'155 391 ₽', priceTotal:'от 6 961 500 ₽',
+          plan:{img:'photos/kronyivolny-plan-2k.jpg', area:'48.70', floor:'2/4', building:'3', flat:'62', deadline:'1 кв. 2028', price:'8 546 850 ₽'}},
         {key:'3k', label:'3-комн.', area:null, pricePerM2:null, priceTotal:null, sold:true}
       ],
       pricesAsOf:'на 24 октября 2026',
@@ -421,8 +424,10 @@ var SITE_DATA = {
       ],
       rooms:[
         {key:'studio', label:'Студия', area:null, pricePerM2:null, priceTotal:null, sold:true},
-        {key:'1k', label:'1-комн.', area:'от 34.44 м²', pricePerM2:'215 000 ₽', priceTotal:'от 7 404 600 ₽'},
-        {key:'2k', label:'2-комн.', area:'от 51.59 м²', pricePerM2:'162 229 ₽', priceTotal:'от 8 369 400 ₽'},
+        {key:'1k', label:'1-комн.', area:'от 34.44 м²', pricePerM2:'215 000 ₽', priceTotal:'от 7 404 600 ₽',
+          plan:{img:'photos/rechnoy-plan-1k.jpg', area:'42.27', floor:'2/5', building:'1', flat:'43', deadline:'1 кв. 2028', price:'8 031 300 ₽'}},
+        {key:'2k', label:'2-комн.', area:'от 51.59 м²', pricePerM2:'162 229 ₽', priceTotal:'от 8 369 400 ₽',
+          plan:{img:'photos/rechnoy-plan-2k.jpg', area:'57.72', floor:'2/5', building:'1', flat:'41', deadline:'1 кв. 2028', price:'9 985 560 ₽'}},
         {key:'3k', label:'3-комн.', area:null, pricePerM2:null, priceTotal:null, sold:true}
       ],
       pricesAsOf:'на 24 октября 2026',
@@ -479,10 +484,14 @@ var SITE_DATA = {
         {v:'4', l:'корпуса'}
       ],
       rooms:[
-        {key:'studio', label:'Студия', area:'от 28.94 м²', pricePerM2:'251 209 ₽', priceTotal:'от 7 270 000 ₽'},
-        {key:'1k', label:'1-комн.', area:'от 28.84 м²', pricePerM2:'246 879 ₽', priceTotal:'от 7 120 000 ₽'},
-        {key:'2k', label:'2-комн.', area:'от 53.03 м²', pricePerM2:'198 567 ₽', priceTotal:'от 10 530 000 ₽'},
-        {key:'3k', label:'3-комн.', area:'от 86.08 м²', pricePerM2:'153 230 ₽', priceTotal:'от 13 190 000 ₽'}
+        {key:'studio', label:'Студия', area:'от 28.94 м²', pricePerM2:'251 209 ₽', priceTotal:'от 7 270 000 ₽',
+          plan:{img:'photos/parad-plan-st.jpg', area:'29.55', floor:'2/5', building:'4', flat:'11', deadline:'Сдан', price:'7 270 000 ₽'}},
+        {key:'1k', label:'1-комн.', area:'от 28.84 м²', pricePerM2:'246 879 ₽', priceTotal:'от 7 120 000 ₽',
+          plan:{img:'photos/parad-plan-1k.jpg', area:'30.00', floor:'2/5', building:'2', flat:'16', deadline:'2 кв. 2028', price:'7 120 000 ₽'}},
+        {key:'2k', label:'2-комн.', area:'от 53.03 м²', pricePerM2:'198 567 ₽', priceTotal:'от 10 530 000 ₽',
+          plan:{img:'photos/parad-plan-2k.jpg', area:'57.71', floor:'2/5', building:'1', flat:'95', deadline:'3 кв. 2027', price:'11 160 000 ₽'}},
+        {key:'3k', label:'3-комн.', area:'от 86.08 м²', pricePerM2:'153 230 ₽', priceTotal:'от 13 190 000 ₽',
+          plan:{img:'photos/parad-plan-3k.jpg', area:'86.08', floor:'3/5', building:'2', flat:'24', deadline:'2 кв. 2028', price:'13 870 000 ₽'}}
       ],
       pricesAsOf:'на 24 октября 2026',
       specs:[
@@ -538,9 +547,12 @@ var SITE_DATA = {
       ],
       rooms:[
         {key:'studio', label:'Студия', area:null, pricePerM2:null, priceTotal:null, sold:true},
-        {key:'1k', label:'1-комн.', area:'от 32.4 м²', pricePerM2:'166 422 ₽', priceTotal:'от 5 392 060 ₽'},
-        {key:'2k', label:'2-комн.', area:'от 57.2 м²', pricePerM2:'162 885 ₽', priceTotal:'от 9 317 020 ₽'},
-        {key:'3k', label:'3-комн.', area:'от 73.4 м²', pricePerM2:'151 191 ₽', priceTotal:'от 11 097 430 ₽'}
+        {key:'1k', label:'1-комн.', area:'от 32.4 м²', pricePerM2:'166 422 ₽', priceTotal:'от 5 392 060 ₽',
+          plan:{img:'photos/simfoniya-plan-1k.jpg', area:'32.70', floor:'2/5', building:'1', flat:'141', deadline:'Сдан', price:'5 441 530 ₽'}},
+        {key:'2k', label:'2-комн.', area:'от 57.2 м²', pricePerM2:'162 885 ₽', priceTotal:'от 9 317 020 ₽',
+          plan:{img:'photos/simfoniya-plan-2k.jpg', area:'65.00', floor:'3/5', building:'1', flat:'12', deadline:'Сдан', price:'9 331 300 ₽'}},
+        {key:'3k', label:'3-комн.', area:'от 73.4 м²', pricePerM2:'151 191 ₽', priceTotal:'от 11 097 430 ₽',
+          plan:{img:'photos/simfoniya-plan-3k.jpg', area:'78.50', floor:'2/5', building:'1', flat:'26', deadline:'Сдан', price:'11 125 650 ₽'}}
       ],
       pricesAsOf:'на 24 октября 2026',
       specs:[
@@ -594,8 +606,10 @@ var SITE_DATA = {
       ],
       rooms:[
         {key:'studio', label:'Студия', area:null, pricePerM2:null, priceTotal:null, sold:true},
-        {key:'1k', label:'1-комн.', area:'от 32.4 м²', pricePerM2:'240 000 ₽', priceTotal:'от 7 776 000 ₽'},
-        {key:'2k', label:'2-комн.', area:'от 55.1 м²', pricePerM2:'180 717 ₽', priceTotal:'от 9 957 500 ₽'},
+        {key:'1k', label:'1-комн.', area:'от 32.4 м²', pricePerM2:'240 000 ₽', priceTotal:'от 7 776 000 ₽',
+          plan:{img:'photos/more-plan-1k.jpg', area:'34.10', floor:'3/7', building:'1.1', flat:'191', deadline:'4 кв. 2026', price:'8 866 000 ₽'}},
+        {key:'2k', label:'2-комн.', area:'от 55.1 м²', pricePerM2:'180 717 ₽', priceTotal:'от 9 957 500 ₽',
+          plan:{img:'photos/more-plan-2k.jpg', area:'63.20', floor:'3/7', building:'1.1', flat:'98', deadline:'4 кв. 2026', price:'11 913 200 ₽'}},
         {key:'3k', label:'3-комн.', area:null, pricePerM2:null, priceTotal:null, sold:true}
       ],
       pricesAsOf:'на 24 октября 2026',
@@ -653,8 +667,10 @@ var SITE_DATA = {
       ],
       rooms:[
         {key:'studio', label:'Студия', area:null, pricePerM2:null, priceTotal:null, sold:true},
-        {key:'1k', label:'1-комн.', area:'от 38.9 м²', pricePerM2:'232 025 ₽', priceTotal:'от 9 025 776 ₽'},
-        {key:'2k', label:'2-комн.', area:'от 62.51 м²', pricePerM2:'218 478 ₽', priceTotal:'от 13 785 977 ₽'},
+        {key:'1k', label:'1-комн.', area:'от 38.9 м²', pricePerM2:'232 025 ₽', priceTotal:'от 9 025 776 ₽',
+          plan:{img:'photos/yantarnye-plan-1k.jpg', area:'38.90', floor:'2/5', building:'1', flat:'38', deadline:'Сдан', price:'9 255 600 ₽'}},
+        {key:'2k', label:'2-комн.', area:'от 62.51 м²', pricePerM2:'218 478 ₽', priceTotal:'от 13 785 977 ₽',
+          plan:{img:'photos/yantarnye-plan-2k.jpg', area:'75.20', floor:'2/5', building:'2', flat:'10', deadline:'Сдан', price:'18 128 820 ₽'}},
         {key:'3k', label:'3-комн.', area:null, pricePerM2:null, priceTotal:null, sold:true}
       ],
       pricesAsOf:'на 24 октября 2026, при 100% оплате',
@@ -707,8 +723,10 @@ var SITE_DATA = {
       ],
       rooms:[
         {key:'studio', label:'Студия', area:null, pricePerM2:null, priceTotal:null, sold:true},
-        {key:'1k', label:'1-комн.', area:'от 36.4 м²', pricePerM2:'304 500 ₽', priceTotal:'от 11 083 800 ₽'},
-        {key:'2k', label:'2-комн.', area:'от 51.9 м²', pricePerM2:'399 000 ₽', priceTotal:'от 20 708 100 ₽'},
+        {key:'1k', label:'1-комн.', area:'от 36.4 м²', pricePerM2:'304 500 ₽', priceTotal:'от 11 083 800 ₽',
+          plan:{img:'photos/moris-plan-1k.jpg', area:'40.50', floor:'2/4', building:'', flat:'8', deadline:'Сдан', price:'13 990 725 ₽'}},
+        {key:'2k', label:'2-комн.', area:'от 51.9 м²', pricePerM2:'399 000 ₽', priceTotal:'от 20 708 100 ₽',
+          plan:{img:'photos/moris-plan-2k.jpg', area:'51.90', floor:'4/4', building:'', flat:'21', deadline:'Сдан', price:'20 708 100 ₽'}},
         {key:'3k', label:'3-комн.', area:null, pricePerM2:null, priceTotal:null, sold:true}
       ],
       pricesAsOf:'на 24 октября 2026',
@@ -766,9 +784,12 @@ var SITE_DATA = {
       ],
       rooms:[
         {key:'studio', label:'Студия', area:null, pricePerM2:null, priceTotal:null, sold:true},
-        {key:'1k', label:'1-комн.', area:'от 35.13 м²', pricePerM2:'173 261 ₽', priceTotal:'от 6 185 400 ₽'},
-        {key:'2k', label:'2-комн.', area:'от 58.3 м²', pricePerM2:'166 000 ₽', priceTotal:'от 9 677 800 ₽'},
-        {key:'3k', label:'3-комн.', area:'от 87.09 м²', pricePerM2:'169 000 ₽', priceTotal:'от 14 718 210 ₽'}
+        {key:'1k', label:'1-комн.', area:'от 35.13 м²', pricePerM2:'173 261 ₽', priceTotal:'от 6 185 400 ₽',
+          plan:{img:'photos/novaya-plan-1k.jpg', area:'38.35', floor:'2/5', building:'4', flat:'67', deadline:'1 кв. 2027', price:'6 826 300 ₽'}},
+        {key:'2k', label:'2-комн.', area:'от 58.3 м²', pricePerM2:'166 000 ₽', priceTotal:'от 9 677 800 ₽',
+          plan:{img:'photos/novaya-plan-2k.jpg', area:'60.32', floor:'2/5', building:'4', flat:'66', deadline:'1 кв. 2027', price:'10 254 400 ₽'}},
+        {key:'3k', label:'3-комн.', area:'от 87.09 м²', pricePerM2:'169 000 ₽', priceTotal:'от 14 718 210 ₽',
+          plan:{img:'photos/novaya-plan-3k.jpg', area:'87.09', floor:'3/5', building:'4', flat:'99', deadline:'1 кв. 2027', price:'14 718 210 ₽'}}
       ],
       pricesAsOf:'на 24 октября 2026, при 100% оплате',
       specs:[

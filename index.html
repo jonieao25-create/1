@@ -1030,7 +1030,7 @@
         + '<span>'+esc(p.area)+' м²</span>'
         + '<span>'+esc(p.floor)+' этаж</span>'
         + (p.building ? '<span>корп. '+esc(p.building)+'</span>' : '')
-        + (p.deadline ? '<span>сдача '+esc(p.deadline)+'</span>' : '')
+        + (p.deadline ? '<span>'+(/сдан/i.test(p.deadline) ? 'дом сдан' : 'сдача '+esc(p.deadline))+'</span>' : '')
       + '</div>'
       + '<div class="price-row total"><span class="l">Цена этой квартиры</span><span class="v">'+esc(p.price)+'</span></div>'
       + '</div>';
