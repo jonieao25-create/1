@@ -373,6 +373,13 @@
   .v-house .facts{font-size:16px; line-height:1.55}
   .v-house .price{font:800 19px 'Unbounded', 'Arial Black', sans-serif}
   .v-house .note{align-self:flex-start; background:var(--accent-soft); border-radius:8px; padding:6px 10px; font-size:14px; font-weight:700}
+  /* планировка дома в карточке посёлка (houses[].plan в data.js) */
+  .v-plan{display:block; width:100%; border:1px solid var(--border); border-radius:14px; background:#fff; padding:10px; cursor:zoom-in}
+  .v-plan img{display:block; width:100%; max-height:340px; object-fit:contain}
+  .v-plan-hint{font-size:12px; color:var(--fg-muted); text-align:center; margin-top:-4px}
+  .v-plan-zoom{position:fixed; inset:0; z-index:60; background:rgba(0,0,0,.85); display:flex; align-items:center; justify-content:center; padding:16px}
+  .v-plan-zoom[hidden]{display:none}
+  .v-plan-zoom img{max-width:100%; max-height:100%; background:#fff; border-radius:12px; padding:8px}
   .v-btn{align-self:flex-start; border:0; border-radius:8px; background:var(--accent); color:var(--accent-ink); font:inherit; font-size:15px; font-weight:700; padding:13px 20px; cursor:pointer}
   .v-btn.center{align-self:center}
   .v-lead{margin:18px 0 0; text-align:center; font-weight:700; font-size:19px}
@@ -908,8 +915,12 @@
         + '<div class="facts">Общая площадь ' + esc(h.area) + ' кв.м.' + (h.bedrooms ? '<br>Спальни ' + esc(h.bedrooms) : '') + (h.plot ? '<br>Участок ' + esc(h.plot) + ' соток' : '') + '</div>'
         + (h.price ? '<div class="price">' + esc(h.price) + '</div>' : '')
         + (h.note ? '<div class="note">' + esc(h.note) + '</div>' : '')
+        + (h.plan ? '<button class="v-plan" type="button" aria-label="Увеличить планировку"><img src="' + esc(h.plan) + '" alt="Планировка дома ' + esc(h.name) + '" loading="lazy"></button>'
+          + '<div class="v-plan-hint">Планировка. Нажмите, чтобы увеличить</div>' : '')
         + '<button class="v-btn" type="button">Оставить заявку →</button>';
-      el.querySelector('button').addEventListener('click', function(){ openLeadForm(lead('дом ' + h.name)); });
+      el.querySelector('.v-btn').addEventListener('click', function(){ openLeadForm(lead('дом ' + h.name)); });
+      var pl = el.querySelector('.v-plan');
+      if (pl) pl.addEventListener('click', function(){ openHousePlan(h.plan); });
       list.appendChild(el);
     });
     if (c.customProject){
@@ -1002,6 +1013,17 @@
       + '<div class="price-row"><span class="l">Цена за м²</span><span class="v">'+r.pricePerM2+'</span></div>'
       + '<div class="price-row total"><span class="l">Цена за квартиру</span><span class="v">'+r.priceTotal+'</span></div>'
       + '<div style="font-size:11.5px;color:var(--fg-muted);padding-top:2px">Цены '+c.pricesAsOf+'</div>';
+  }
+
+  // планировка дома на весь экран; закрывается нажатием в любом месте
+  var housePlanZoom = document.createElement('div');
+  housePlanZoom.className = 'v-plan-zoom'; housePlanZoom.hidden = true;
+  housePlanZoom.innerHTML = '<img alt="Планировка">';
+  housePlanZoom.addEventListener('click', function(){ housePlanZoom.hidden = true; });
+  document.body.appendChild(housePlanZoom);
+  function openHousePlan(src){
+    housePlanZoom.querySelector('img').src = src;
+    housePlanZoom.hidden = false;
   }
 
   function goHome(){

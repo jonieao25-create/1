@@ -837,13 +837,14 @@ var SITE_DATA = {
       // крупная надпись на всю ширину плашки; каждая строка — отдельно
       tagline:['Ваш будущий дом', 'уже построен', 'и ждёт вас'],
       // карточки домов. price — текстом, как показать на карточке
+      // plan — картинка планировки дома (необязательно; нет plan — нет планировки)
       houses:[
-        {name:'Лекса',  photo:'photos/rodniki-lexa.jpg',  area:'102', bedrooms:'2', plot:'6,5–8,5', price:'от 10,8 млн ₽'},
+        {name:'Лекса',  photo:'photos/rodniki-lexa.jpg',  area:'102', bedrooms:'2', plot:'6,5–8,5', price:'от 10,8 млн ₽', plan:'photos/rodniki-plan-lexa.jpg'},
         {name:'Ультра', photo:'photos/rodniki-ultra.jpg', area:'106', bedrooms:'2', plot:'6,5–8,5', price:'от 10,8 млн ₽'},
         {name:'Сайма',  photo:'photos/rodniki-saima.jpg', area:'117', bedrooms:'3', plot:'6,5–8,5', price:'от 11,8 млн ₽'},
-        {name:'Пания',  photo:'photos/rodniki-pania.jpg', area:'142', bedrooms:'3', plot:'7,5–10',  price:'от 14,75 млн ₽'},
+        {name:'Пания',  photo:'photos/rodniki-pania.jpg', area:'142', bedrooms:'3', plot:'7,5–10',  price:'от 14,75 млн ₽', plan:'photos/rodniki-plan-pania.jpg'},
         {name:'Мурей',  photo:'photos/rodniki-myrey.jpg', area:'146', bedrooms:'3', plot:'7,5–10',  price:'от 15,15 млн ₽'},
-        {name:'Микеа',  photo:'photos/rodniki-mikea.jpg', area:'130', bedrooms:'3', plot:'6,5–8,5', price:'от 14 млн ₽'},
+        {name:'Микеа',  photo:'photos/rodniki-mikea.jpg', area:'130', bedrooms:'3', plot:'6,5–8,5', price:'от 14 млн ₽', plan:'photos/rodniki-plan-mikea.jpg'},
         {name:'Талма',  photo:'photos/rodniki-talma.jpg', area:'142', bedrooms:'3', plot:'7,5–10',  price:'Цена по запросу'}
       ],
       // последняя карточка без фото. Чтобы убрать — удалите блок customProject
