@@ -378,6 +378,7 @@
   .v-hbtn{border:0; border-radius:12px; background:#fff; color:#463936; min-height:52px; padding:10px 12px; display:flex; align-items:center; justify-content:space-between; gap:6px; font:800 12px/1.25 'Unbounded', 'Arial Black', sans-serif; text-transform:uppercase; text-align:left; cursor:pointer}
   .v-hbtn::after{content:'→'; flex:none; font-size:15px; color:var(--accent)}
   .v-hbtn.wide{grid-column:1/-1}
+  .v-hbtn small{display:block; margin-top:4px; font:700 13px 'Manrope', -apple-system, sans-serif; text-transform:none; color:var(--fg-muted)}
   .v-hbtn.long{font-size:10px; letter-spacing:-.02em}
   .v-house .v-more{align-self:flex-start; border:0; background:none; padding:2px 0; color:var(--accent); font:inherit; font-size:15px; font-weight:700; cursor:pointer}
 
@@ -1020,7 +1021,8 @@
     if (c.houseButtons){
       (c.houses || []).forEach(function(h, i){
         var b = document.createElement('button');
-        b.type = 'button'; b.className = 'v-hbtn'; b.textContent = h.name;
+        b.type = 'button'; b.className = 'v-hbtn';
+        b.innerHTML = '<span>' + esc(h.name) + (h.area ? '<small>' + esc(h.area) + ' м²</small>' : '') + '</span>';
         b.addEventListener('click', function(){
           if (hasPage(h)) openHouse(c, h);
           else if (list.hidden) openLeadForm(lead('дом ' + h.name));
