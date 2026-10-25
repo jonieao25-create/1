@@ -294,9 +294,12 @@ var SITE_DATA = {
       ],
       rooms:[
         {key:'studio', label:'Студия', area:null, pricePerM2:null, priceTotal:null, sold:true},
-        {key:'1k', label:'1-комн.', area:'от 36.48 м²', pricePerM2:'201 206 ₽', priceTotal:'от 7 340 000 ₽'},
-        {key:'2k', label:'2-комн.', area:'от 58.20 м²', pricePerM2:'155 000 ₽', priceTotal:'от 9 021 000 ₽'},
-        {key:'3k', label:'3-комн.', area:'от 73.29 м²', pricePerM2:'160 000 ₽', priceTotal:'от 11 726 400 ₽'}
+        {key:'1k', label:'1-комн.', area:'от 36.48 м²', pricePerM2:'201 206 ₽', priceTotal:'от 7 340 000 ₽',
+          plan:{img:'photos/venecianskiy-plan-1k.jpg', area:'38.25', floor:'3/9', building:'5', flat:'127', deadline:'2 кв. 2027', price:'7 917 750 ₽'}},
+        {key:'2k', label:'2-комн.', area:'от 58.20 м²', pricePerM2:'155 000 ₽', priceTotal:'от 9 021 000 ₽',
+          plan:{img:'photos/venecianskiy-plan-2k.jpg', area:'62.38', floor:'3/9', building:'6', flat:'87', deadline:'2 кв. 2027', price:'10 542 220 ₽'}},
+        {key:'3k', label:'3-комн.', area:'от 73.29 м²', pricePerM2:'160 000 ₽', priceTotal:'от 11 726 400 ₽',
+          plan:{img:'photos/venecianskiy-plan-3k.jpg', area:'74.34', floor:'3/9', building:'6', flat:'45', deadline:'2 кв. 2027', price:'12 563 460 ₽'}}
       ],
       pricesAsOf:'на 24 октября 2026',
       specs:[
