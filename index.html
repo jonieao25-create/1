@@ -1023,7 +1023,9 @@
     if (c.houseButtons){
       (c.houses || []).forEach(function(h, i){
         var b = document.createElement('button');
-        b.type = 'button'; b.className = 'v-hbtn';
+        // последняя кнопка без пары (и без «Индивидуального проекта») — на всю ширину
+        var alone = !c.customProject && i === c.houses.length - 1 && i % 2 === 0;
+        b.type = 'button'; b.className = 'v-hbtn' + (alone ? ' wide' : '');
         b.innerHTML = '<span>' + esc(h.name) + (h.area ? '<small>' + esc(h.area) + ' м²</small>' : '') + '</span>';
         b.addEventListener('click', function(){
           if (hasPage(h)) openHouse(c, h);
