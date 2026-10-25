@@ -372,6 +372,7 @@
   .v-house h3{margin:4px 0 0; font:800 20px/1.15 'Unbounded', 'Arial Black', sans-serif; text-transform:uppercase}
   .v-house .facts{font-size:16px; line-height:1.55}
   .v-house .price{font:800 19px 'Unbounded', 'Arial Black', sans-serif}
+  .h-note{align-self:flex-start; background:var(--accent-soft); border-radius:8px; padding:6px 10px; font-size:14px; font-weight:700}
   .v-house .note{align-self:flex-start; background:var(--accent-soft); border-radius:8px; padding:6px 10px; font-size:14px; font-weight:700}
   /* кнопки домов под крупной фразой посёлка */
   .v-hbtns{display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px}
@@ -576,6 +577,7 @@
     <h2 class="h-title" id="hTitle"></h2>
     <div class="h-price" id="hPrice"></div>
     <div class="h-facts" id="hFacts"></div>
+    <div class="h-note" id="hNote" hidden></div>
     <div id="hRoomsBox">
       <h3 class="h-sub">Площади помещений</h3>
       <div class="h-rooms" id="hRooms" style="margin-top:10px"></div>
@@ -1096,7 +1098,9 @@
   function openHouse(c, h){
     var short = c.logo || c.name;
     villageScroll = window.scrollY;
-    document.getElementById('hTopTitle').textContent = 'Дом «' + h.name + '»';
+    // «Тип 2» → «Дом «Тип 2»», а «Дом 100» и «Дуплекс 72» оставляем как есть
+    var full = /^(Дом|Дуплекс|Квадрохаус)/.test(h.name) ? h.name : 'Дом «' + h.name + '»';
+    document.getElementById('hTopTitle').textContent = full;
     document.getElementById('hTopSub').textContent = c.name;
 
     var photos = (h.photos && h.photos.length) ? h.photos : [h.photo];
@@ -1107,6 +1111,9 @@
 
     document.getElementById('hTitle').textContent = h.name;
     document.getElementById('hPrice').textContent = h.price || '';
+    var note = document.getElementById('hNote');
+    note.textContent = h.note || '';
+    note.hidden = !h.note;
     document.getElementById('hFacts').innerHTML = [
       h.area ? h.area + ' м²' : '', h.bedrooms ? 'спальни: ' + h.bedrooms : '', h.plot ? 'участок ' + h.plot + ' сот.' : ''
     ].filter(Boolean).map(function(s){ return '<span>' + esc(s) + '</span>'; }).join('');
@@ -1124,7 +1131,7 @@
       planBtn.onclick = function(){ openHousePlan(plans[i]); };
       [].forEach.call(tabs.children, function(t, j){ t.classList.toggle('on', j === i); });
     }
-    tabs.innerHTML = plans.length > 1 ? plans.map(function(_, i){ return '<button type="button" class="h-tab">Вариант ' + (i + 1) + '</button>'; }).join('') : '';
+    tabs.innerHTML = plans.length > 1 ? plans.map(function(_, i){ return '<button type="button" class="h-tab">' + esc((h.planNames && h.planNames[i]) || 'Вариант ' + (i + 1)) + '</button>'; }).join('') : '';
     [].forEach.call(tabs.children, function(t, i){ t.addEventListener('click', function(){ showPlan(i); }); });
     if (plans.length) showPlan(0);
 
@@ -1136,7 +1143,7 @@
         + s.items.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></details>';
     }).join('');
 
-    document.getElementById('hLead').onclick = function(){ openLeadForm({ name: 'посёлок ' + short + ', дом ' + h.name, room: '' }); };
+    document.getElementById('hLead').onclick = function(){ openLeadForm({ name: 'посёлок ' + short + ', ' + full.charAt(0).toLowerCase() + full.slice(1), room: '' }); };
 
     viewVillage.hidden = true;
     viewHouse.hidden = false;

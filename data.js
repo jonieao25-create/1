@@ -939,12 +939,15 @@ var SITE_DATA = {
       ],
       tagline:['Готовые дома', 'в наличии!'],
       // note — строка в плашке под ценой
+      // кнопки с моделями домов под фразой; карточки домов не показываем
+      houseButtons:true,
+      houseCards:false,
       houses:[
-        {name:'Тип 1', photo:'photos/rublevochka-tip1.jpg', area:'85',  bedrooms:'2', plot:'5', price:'11 млн ₽',   note:'Дом с ремонтом от 1,5 млн ₽'},
-        {name:'Тип 2', photo:'photos/rublevochka-tip2.jpg', area:'90',  bedrooms:'2', plot:'6', price:'12 млн ₽',   note:'Дом с ремонтом от 1,6 млн ₽'},
-        {name:'Тип 3', photo:'photos/rublevochka-tip3.jpg', area:'100', bedrooms:'3', plot:'6', price:'13,5 млн ₽', note:'Дом с ремонтом от 1,95 млн ₽'},
-        {name:'Тип 4', photo:'photos/rublevochka-tip4.jpg', area:'124', bedrooms:'3', plot:'6', price:'15 млн ₽',   note:'Дом с ремонтом от 2,3 млн ₽'},
-        {name:'Тип 5', photo:'photos/rublevochka-tip5.jpg', area:'116', bedrooms:'3', plot:'8', price:'18 млн ₽',   note:'Дом с ремонтом от 2,8 млн ₽'}
+        {name:'Тип 1', photo:'photos/rublevochka-tip1.jpg', photos:['photos/rublevochka-tip1-1.jpg', 'photos/rublevochka-tip1-2.jpg', 'photos/rublevochka-tip1-3.jpg', 'photos/rublevochka-tip1-4.jpg', 'photos/rublevochka-tip1-5.jpg'], plans:['photos/rublevochka-plan-tip1.jpg'], area:'85',  bedrooms:'2', plot:'5', price:'11 млн ₽',   note:'Дом с ремонтом от 1,5 млн ₽'},
+        {name:'Тип 2', photo:'photos/rublevochka-tip2.jpg', photos:['photos/rublevochka-tip2-1.jpg', 'photos/rublevochka-tip2-2.jpg', 'photos/rublevochka-tip2-3.jpg', 'photos/rublevochka-tip2-4.jpg'], plans:['photos/rublevochka-plan-tip2.jpg'], area:'90',  bedrooms:'2', plot:'6', price:'12 млн ₽',   note:'Дом с ремонтом от 1,6 млн ₽'},
+        {name:'Тип 3', photo:'photos/rublevochka-tip3.jpg', photos:['photos/rublevochka-tip3-1.jpg', 'photos/rublevochka-tip3-2.jpg', 'photos/rublevochka-tip3-3.jpg', 'photos/rublevochka-tip3-4.jpg', 'photos/rublevochka-tip3-5.jpg', 'photos/rublevochka-tip3-6.jpg'], plans:['photos/rublevochka-plan-tip3.jpg'], area:'100', bedrooms:'3', plot:'6', price:'13,5 млн ₽', note:'Дом с ремонтом от 1,95 млн ₽'},
+        {name:'Тип 4', photo:'photos/rublevochka-tip4.jpg', photos:['photos/rublevochka-tip4-1.jpg', 'photos/rublevochka-tip4-2.jpg', 'photos/rublevochka-tip4-3.jpg', 'photos/rublevochka-tip4-4.jpg'], plans:['photos/rublevochka-plan-tip4.jpg'], area:'124', bedrooms:'3', plot:'6', price:'15 млн ₽',   note:'Дом с ремонтом от 2,3 млн ₽'},
+        {name:'Тип 5', photo:'photos/rublevochka-tip5.jpg', photos:['photos/rublevochka-tip5-1.jpg', 'photos/rublevochka-tip5-2.jpg', 'photos/rublevochka-tip5-3.jpg', 'photos/rublevochka-tip5-4.jpg'], plans:['photos/rublevochka-plan-tip5.jpg'], area:'116', bedrooms:'3', plot:'8', price:'18 млн ₽',   note:'Дом с ремонтом от 2,8 млн ₽'}
       ],
       conditionsLead:'Дом может позволить себе каждый',
       conditionsTitle:'Условия покупки',
@@ -994,11 +997,32 @@ var SITE_DATA = {
         {icon:'bio',   text:'Парк 300 000 м²'}
       ],
       tagline:['Готовые дома.', 'Под ключ'],
-      // три группы домов, как на сайте; спальни и участок не указаны
+      // кнопки с моделями домов под фразой; карточки домов не показываем
+      houseButtons:true,
+      houseCards:false,
+      // типы домов с laskino-park.ru (25 октября); price — «серый ключ», note — «ремонт стандарт».
+      // Дома 96 и 141 м² на сайте проданы, их не показываем. Спальни — по планировке (1К/2К/3К).
       houses:[
-        {name:'Частные дома', photo:'photos/laskino-houses.jpg', area:'от 75', bedrooms:'', plot:'', price:'от 9 900 000 ₽', note:'Автономное отопление'},
-        {name:'Дуплексы',     photo:'photos/laskino-duplex.jpg', area:'от 72', bedrooms:'', plot:'', price:'от 9 300 000 ₽', note:'Автономное отопление'},
-        {name:'Квадрохаусы',  photo:'photos/laskino-quadro.jpg', area:'от 56', bedrooms:'', plot:'', price:'по запросу',     note:'Автономное отопление'}
+        {name:'Дом 75', photo:'photos/laskino-houses.jpg', photos:['photos/laskino-houses.jpg'], plans:['photos/laskino-plan-dom75.jpg'], area:'75', bedrooms:'2', plot:'', price:'9 900 000 ₽', note:'С ремонтом: 11 800 000 ₽'},
+        {name:'Дом 85', photo:'photos/laskino-houses.jpg', photos:['photos/laskino-houses.jpg'], plans:['photos/laskino-plan-dom85.jpg'], area:'85', bedrooms:'2', plot:'4–5', price:'11 500 000 ₽', note:'С ремонтом: 13 500 000 ₽'},
+        {name:'Дом 87', photo:'photos/laskino-houses.jpg', photos:['photos/laskino-houses.jpg'], plans:['photos/laskino-plan-dom87.jpg'], area:'87', bedrooms:'2', plot:'', price:'10 900 000 ₽', note:'С ремонтом: 12 800 000 ₽'},
+        {name:'Дом 100', photo:'photos/laskino-houses.jpg', photos:['photos/laskino-houses.jpg', 'photos/laskino-dom100-1.jpg'], plans:['photos/laskino-plan-dom100.jpg'], area:'100', bedrooms:'3', plot:'4–5', price:'13 000 000 ₽', note:'С ремонтом: 15 200 000 ₽'},
+        {name:'Дом 115', photo:'photos/laskino-houses.jpg', photos:['photos/laskino-houses.jpg', 'photos/laskino-dom115-1.jpg'], plans:['photos/laskino-plan-dom115.jpg'], area:'115', bedrooms:'2', plot:'5', price:'14 300 000 ₽', note:'С ремонтом: 16 600 000 ₽'},
+        {name:'Дом 117', photo:'photos/laskino-houses.jpg', photos:['photos/laskino-houses.jpg'], plans:['photos/laskino-plan-dom117.jpg'], area:'117', bedrooms:'3', plot:'5', price:'14 600 000 ₽', note:'С ремонтом: 16 900 000 ₽'},
+        {name:'Дом 134', photo:'photos/laskino-houses.jpg', photos:['photos/laskino-houses.jpg', 'photos/laskino-dom134-1.jpg'], plans:['photos/laskino-plan-dom134.jpg'], area:'134', bedrooms:'3', plot:'6–7,5', price:'от 15 100 000 ₽', note:'С ремонтом: 18 600 000 ₽'},
+        {name:'Дом 160', photo:'photos/laskino-houses.jpg', photos:['photos/laskino-houses.jpg', 'photos/laskino-dom160-1.jpg'], plans:['photos/laskino-plan-dom160.jpg'], area:'160', bedrooms:'3', plot:'6,5–9', price:'от 18 800 000 ₽', note:'С ремонтом: 22 800 000 ₽'},
+        {name:'Дом 208', photo:'photos/laskino-houses.jpg', photos:['photos/laskino-houses.jpg'], plans:['photos/laskino-plan-dom208.jpg'], area:'208', bedrooms:'3', plot:'7–12', price:'от 23 400 000 ₽', note:'С ремонтом: 30 400 000 ₽'},
+        {name:'Дуплекс 72', photo:'photos/laskino-duplex.jpg', photos:['photos/laskino-duplex.jpg', 'photos/laskino-duplex-72-1.jpg'], plans:['photos/laskino-plan-duplex-72.jpg'], area:'72', bedrooms:'2', plot:'', price:'9 300 000 ₽', note:'С ремонтом: 10 500 000 ₽'},
+        {name:'Дуплекс 82', photo:'photos/laskino-duplex.jpg', photos:['photos/laskino-duplex.jpg'], plans:['photos/laskino-plan-duplex-82.jpg'], area:'82', bedrooms:'2', plot:'', price:'от 9 500 000 ₽', note:'С ремонтом: 11 100 000 ₽'},
+        {name:'Квадрохаус 56', photo:'photos/laskino-quadro.jpg', photos:['photos/laskino-quadro.jpg', 'photos/laskino-kvadrohaus-1.jpg'], plans:['photos/laskino-plan-kvadrohaus-56.jpg'], area:'56', bedrooms:'1', plot:'', price:'по запросу', note:''},
+        {name:'Квадрохаус 86', photo:'photos/laskino-quadro.jpg', photos:['photos/laskino-quadro.jpg', 'photos/laskino-kvadrohaus-1.jpg'], plans:['photos/laskino-plan-kvadrohaus-86.jpg'], area:'86', bedrooms:'2', plot:'', price:'по запросу', note:''}
+      ],
+      // «Как построен дом» на странице дома: одинаково для всех типов (laskino-park.ru)
+      houseSpecs:[
+        {title:'Фундамент и стены', items:['Железобетонная монолитная плита', 'Газосиликатный блок, марка не ниже М500']},
+        {title:'Фасад и кровля', items:['Утепление пенополистиролом', 'Отделка гибким клинкером', 'Металлочерепица с полимерным покрытием']},
+        {title:'Перекрытия, окна, двери', items:['Деревянные утеплённые перекрытия на клеёных балках', 'Окна: 6-камерный профиль, тройной стеклопакет 44 мм', 'Входная дверь с терморазрывом']},
+        {title:'Коммуникации', items:['Газ', 'Центральная канализация', 'Центральное водоснабжение', 'Автономное отопление, тёплый пол']}
       ],
       conditionsLead:'Дом может позволить себе каждый',
       conditionsTitle:'Условия покупки',
@@ -1051,13 +1075,16 @@ var SITE_DATA = {
       ],
       tagline:['Все дома в наличии', 'и готовы к показу'],
       // note — цена ремонта (на сайте «Ремонт База» и «Ремонт Комфорт»)
+      // кнопки с моделями домов под фразой; карточки домов не показываем
+      houseButtons:true,
+      houseCards:false,
       houses:[
-        {name:'Тип 1', photo:'photos/novrublevochka-tip1.jpg', area:'77',     bedrooms:'2',   plot:'3',   price:'11 млн ₽',      note:'Ремонт от 1,55 млн ₽'},
-        {name:'Тип 2', photo:'photos/novrublevochka-tip2.jpg', area:'84',     bedrooms:'2',   plot:'6',   price:'12 млн ₽',      note:'Ремонт от 1,6 млн ₽'},
-        {name:'Тип 3', photo:'photos/novrublevochka-tip3.jpg', area:'98',     bedrooms:'3',   plot:'6',   price:'13 млн ₽',      note:'Ремонт от 1,95 млн ₽'},
-        {name:'Тип 4', photo:'photos/novrublevochka-tip4.jpg', area:'120',    bedrooms:'3',   plot:'6',   price:'14,5 млн ₽',    note:'Ремонт от 2,3 млн ₽'},
-        {name:'Тип 5', photo:'photos/novrublevochka-tip5.jpg', area:'120–122', bedrooms:'2–3', plot:'6–8', price:'от 14,5 млн ₽', note:'Ремонт от 2,8 млн ₽'},
-        {name:'Тип 6', photo:'photos/novrublevochka-tip6.jpg', area:'148',    bedrooms:'3',   plot:'8',   price:'18 млн ₽',      note:'Ремонт от 3,1 млн ₽'}
+        {name:'Тип 1', photo:'photos/novrublevochka-tip1.jpg', photos:['photos/novrublevochka-tip1-1.jpg', 'photos/novrublevochka-tip1-2.jpg', 'photos/novrublevochka-tip1-3.jpg'], plans:['photos/novrublevochka-plan-tip1.jpg', 'photos/novrublevochka-plan-tip1-3d.jpg'], planNames:['План', '3D-план'], area:'77',     bedrooms:'2',   plot:'3',   price:'11 млн ₽',      note:'Ремонт от 1,55 млн ₽'},
+        {name:'Тип 2', photo:'photos/novrublevochka-tip2.jpg', photos:['photos/novrublevochka-tip2-1.jpg', 'photos/novrublevochka-tip2-2.jpg', 'photos/novrublevochka-tip2-3.jpg', 'photos/novrublevochka-tip2-4.jpg', 'photos/novrublevochka-tip2-5.jpg'], plans:['photos/novrublevochka-plan-tip2.jpg', 'photos/novrublevochka-plan-tip2-3d.jpg'], planNames:['План', '3D-план'], area:'84',     bedrooms:'2',   plot:'6',   price:'12 млн ₽',      note:'Ремонт от 1,6 млн ₽'},
+        {name:'Тип 3', photo:'photos/novrublevochka-tip3.jpg', photos:['photos/novrublevochka-tip3-1.jpg', 'photos/novrublevochka-tip3-2.jpg', 'photos/novrublevochka-tip3-3.jpg', 'photos/novrublevochka-tip3-4.jpg', 'photos/novrublevochka-tip3-5.jpg', 'photos/novrublevochka-tip3-6.jpg'], plans:['photos/novrublevochka-plan-tip3.jpg', 'photos/novrublevochka-plan-tip3-3d.jpg'], planNames:['План', '3D-план'], area:'98',     bedrooms:'3',   plot:'6',   price:'13 млн ₽',      note:'Ремонт от 1,95 млн ₽'},
+        {name:'Тип 4', photo:'photos/novrublevochka-tip4.jpg', photos:['photos/novrublevochka-tip4-1.jpg', 'photos/novrublevochka-tip4-2.jpg'], plans:['photos/novrublevochka-plan-tip4.jpg', 'photos/novrublevochka-plan-tip4-3d.jpg'], planNames:['План', '3D-план'], area:'120',    bedrooms:'3',   plot:'6',   price:'14,5 млн ₽',    note:'Ремонт от 2,3 млн ₽'},
+        {name:'Тип 5', photo:'photos/novrublevochka-tip5.jpg', photos:['photos/novrublevochka-tip5-1.jpg', 'photos/novrublevochka-tip5-2.jpg'], plans:[], area:'120–122', bedrooms:'2–3', plot:'6–8', price:'от 14,5 млн ₽', note:'Ремонт от 2,8 млн ₽'},
+        {name:'Тип 6', photo:'photos/novrublevochka-tip6.jpg', photos:['photos/novrublevochka-tip6-1.jpg', 'photos/novrublevochka-tip6-2.jpg'], plans:['photos/novrublevochka-plan-tip6.jpg', 'photos/novrublevochka-plan-tip6-3d.jpg'], planNames:['План', '3D-план'], area:'148',    bedrooms:'3',   plot:'8',   price:'18 млн ₽',      note:'Ремонт от 3,1 млн ₽'}
       ],
       conditionsLead:'Дом мечты может позволить себе каждый',
       conditionsTitle:'Условия покупки',
