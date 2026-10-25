@@ -384,7 +384,7 @@
   /* ===== страница дома в посёлке ===== */
   #view-house{display:flex; flex-direction:column; gap:14px; padding-bottom:28px}
   #view-house[hidden]{display:none}
-  #view-house [hidden], .v-hbtns[hidden]{display:none !important}
+  #view-house [hidden], .v-hbtns[hidden], .v-houses[hidden]{display:none !important}
   .h-title{margin:2px 0 0; font:800 26px/1.1 'Unbounded', 'Arial Black', sans-serif; text-transform:uppercase}
   .h-price{font:800 21px 'Unbounded', 'Arial Black', sans-serif}
   .h-facts{display:flex; flex-wrap:wrap; gap:6px}
@@ -977,6 +977,8 @@
 
     var list = document.getElementById('vHouses');
     list.innerHTML = '';
+    // houseCards:false в data.js — карточки домов не показываем (остаются кнопки домов)
+    list.hidden = c.houseCards === false;
     var cards = [];
     (c.houses || []).forEach(function(h){
       var plan0 = housePlans(h)[0];
@@ -1021,6 +1023,7 @@
         b.type = 'button'; b.className = 'v-hbtn'; b.textContent = h.name;
         b.addEventListener('click', function(){
           if (hasPage(h)) openHouse(c, h);
+          else if (list.hidden) openLeadForm(lead('дом ' + h.name));
           else cards[i].scrollIntoView({ behavior:'smooth', block:'start' });
         });
         hb.appendChild(b);
@@ -1029,7 +1032,10 @@
         var b = document.createElement('button');
         b.type = 'button'; b.className = 'v-hbtn' + ((c.houses || []).length % 2 ? '' : ' wide') + (c.customProject.title.length > 12 ? ' long' : '');
         b.textContent = c.customProject.title;
-        b.addEventListener('click', function(){ cp.scrollIntoView({ behavior:'smooth', block:'start' }); });
+        b.addEventListener('click', function(){
+          if (list.hidden) openLeadForm(lead('индивидуальный проект'));
+          else cp.scrollIntoView({ behavior:'smooth', block:'start' });
+        });
         hb.appendChild(b);
       }
     }
