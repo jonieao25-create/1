@@ -113,14 +113,16 @@
 
   .list{display:flex; flex-direction:column; gap:12px; padding:16px 0 28px}
 
-  /* переключатель разделов: Новостройки / Коттеджи / Побережье */
-  .sec-tabs{display:flex; gap:8px; overflow-x:auto; padding:14px 0 2px; scrollbar-width:none}
-  .sec-tabs::-webkit-scrollbar{display:none}
+  /* переключатель разделов: две вкладки в ряд (порядок — как в data.js),
+     последняя вкладка, если она одна в ряду, растягивается на всю ширину */
+  .sec-tabs{display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:14px 0 2px}
   .sec-tab{
-    flex:0 0 auto; padding:8px 14px; border-radius:999px; cursor:pointer;
+    padding:9px 10px; border-radius:999px; cursor:pointer; text-align:center;
     border:1px solid var(--border); background:var(--bg-elevated); color:var(--fg);
     font:inherit; font-size:13.5px; font-weight:700; white-space:nowrap;
+    overflow:hidden; text-overflow:ellipsis;
   }
+  .sec-tab:last-child:nth-child(odd){grid-column:1 / -1}
   .sec-tab.active{background:var(--accent); border-color:var(--accent); color:var(--accent-ink)}
   .sec-empty{
     background:var(--bg-elevated); border:1px dashed var(--border); border-radius:18px;
@@ -689,7 +691,6 @@
     [].forEach.call(secTabsEl.children, function(b){
       var on = b.getAttribute('data-sec') === sectionId;
       b.classList.toggle('active', on);
-      if (on) secTabsEl.scrollLeft = b.offsetLeft - 16;   // активная вкладка всегда видна
     });
 
     // заголовок раздела: из раздела, а если там пусто — из общих настроек
