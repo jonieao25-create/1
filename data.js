@@ -432,7 +432,8 @@ var SITE_DATA = {
         'photos/elizavetinsky-1.jpg',
         'photos/elizavetinsky-2.jpg',
         'photos/elizavetinsky-3.jpg',
-        'photos/elizavetinsky-4.jpg'
+        'photos/elizavetinsky-4.jpg',
+        'photos/elizavetinsky-5.jpg'
       ],
       quick:[
         {v:'15', l:'этажей'},
@@ -492,7 +493,9 @@ var SITE_DATA = {
         'photos/nevskiy-1.jpg',
         'photos/nevskiy-2.jpg',
         'photos/nevskiy-3.jpg',
-        'photos/nevskiy-4.jpg'
+        'photos/nevskiy-4.jpg',
+        'photos/nevskiy-5.jpg',
+        'photos/nevskiy-6.jpg'
       ],
       quick:[
         {v:'9–10', l:'этажей'},
