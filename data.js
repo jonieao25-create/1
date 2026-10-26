@@ -1309,7 +1309,7 @@ var SITE_DATA = {
       // надпись в левом нижнем углу карусели
       addr:'Посёлок Родники',
       // для карточки в списке посёлков
-      clsLabel:'Посёлок Родники',
+      clsLabel:'п. Родники',
       deadlineShort:'8 типов домов',
       priceFrom:10800000,
       // фото для карусели (листаются пальцем)
@@ -1418,7 +1418,7 @@ var SITE_DATA = {
       logo:'Рублёвочка Юг',
       logoImg:'photos/rublevochka-logo.png',
       addr:'п. Голубево, ул. Лазурная',
-      clsLabel:'Посёлок Голубево',
+      clsLabel:'п. Голубево',
       deadlineShort:'5 типов домов',
       priceFrom:11000000,
       photos:[
@@ -1477,7 +1477,7 @@ var SITE_DATA = {
       // ширина логотипа на карусели, в пикселях (меньше обычного)
       logoWidth:150,
       addr:'п. Голубево, ул. Кофейная, 2',
-      clsLabel:'Посёлок Голубево',
+      clsLabel:'п. Голубево',
       deadlineShort:'6 типов домов',
       priceFrom:11000000,
       photos:[
@@ -1536,7 +1536,7 @@ var SITE_DATA = {
       // логотип на карусели не показываем (просьба Евгения)
       hideLogo:true,
       addr:'п. Ласкино, ул. 1-я Луговая',
-      clsLabel:'Посёлок Ласкино',
+      clsLabel:'п. Ласкино',
       deadlineShort:'3 типа домов',
       priceFrom:9300000,
       photos:[
