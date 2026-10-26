@@ -1309,7 +1309,7 @@ var SITE_DATA = {
       // надпись в левом нижнем углу карусели
       addr:'Посёлок Родники',
       // для карточки в списке посёлков
-      clsLabel:'Коттеджный посёлок',
+      clsLabel:'п. Родники',
       deadlineShort:'8 типов домов',
       priceFrom:10800000,
       // фото для карусели (листаются пальцем)
@@ -1418,7 +1418,7 @@ var SITE_DATA = {
       logo:'Рублёвочка Юг',
       logoImg:'photos/rublevochka-logo.png',
       addr:'п. Голубево, ул. Лазурная',
-      clsLabel:'Коттеджный посёлок',
+      clsLabel:'п. Голубево',
       deadlineShort:'5 типов домов',
       priceFrom:11000000,
       photos:[
@@ -1463,6 +1463,66 @@ var SITE_DATA = {
       consultText:'Получить консультацию'
     },
     // -------------------------------------------------------------------
+    // КОТТЕДЖНЫЙ ПОСЁЛОК «Новая Рублёвочка». Копия блока «Родников».
+    // Источник данных: рублевочка.рф/nr, 23 октября 2026.
+    // -------------------------------------------------------------------
+    {
+      id:'novrublevochka',
+      section:'cottages',
+      type:'village',
+      name:'Посёлок «Новая Рублёвочка»',
+      // название для заявок; на карусели вместо него картинка-логотип
+      logo:'Новая Рублёвочка',
+      logoImg:'photos/novrublevochka-logo.png',
+      // ширина логотипа на карусели, в пикселях (меньше обычного)
+      logoWidth:150,
+      addr:'п. Голубево, ул. Кофейная, 2',
+      clsLabel:'п. Голубево',
+      deadlineShort:'6 типов домов',
+      priceFrom:11000000,
+      photos:[
+        'photos/novrublevochka-1.jpg',
+        'photos/novrublevochka-2.jpg',
+        'photos/novrublevochka-3.jpg',
+        'photos/novrublevochka-4.jpg',
+        'photos/novrublevochka-5.jpg',
+        'photos/novrublevochka-6.jpg'
+      ],
+      headline:'6 типов домов',
+      perks:[
+        {icon:'shield', text:'Территория огорожена: КПП, охрана, видеонаблюдение', wide:true},
+        {icon:'tree',   text:'Рядом заповедник Вальдбург'},
+        {icon:'city',   text:'Сквер и гостевая парковка'},
+        {icon:'ball',   text:'Открытые теннисные корты'},
+        {icon:'ball',   text:'Детская футбольная школа'},
+        {icon:'clean',  text:'Управляющая компания: дороги, покос, уборка', wide:true}
+      ],
+      tagline:['Все дома в наличии', 'и готовы к показу'],
+      // note — цена ремонта (на сайте «Ремонт База» и «Ремонт Комфорт»)
+      // кнопки с моделями домов под фразой; карточки домов не показываем
+      houseButtons:true,
+      houseCards:false,
+      houses:[
+        {name:'Тип 1', photo:'photos/novrublevochka-tip1.jpg', photos:['photos/novrublevochka-tip1-1.jpg', 'photos/novrublevochka-tip1-2.jpg', 'photos/novrublevochka-tip1-3.jpg'], plans:['photos/novrublevochka-plan-tip1.jpg', 'photos/novrublevochka-plan-tip1-3d.jpg'], planNames:['План', '3D-план'], area:'77',     bedrooms:'2',   plot:'3',   price:'11 млн ₽',      note:'Ремонт от 1,55 млн ₽'},
+        {name:'Тип 2', photo:'photos/novrublevochka-tip2.jpg', photos:['photos/novrublevochka-tip2-1.jpg', 'photos/novrublevochka-tip2-2.jpg', 'photos/novrublevochka-tip2-3.jpg', 'photos/novrublevochka-tip2-4.jpg', 'photos/novrublevochka-tip2-5.jpg'], plans:['photos/novrublevochka-plan-tip2.jpg', 'photos/novrublevochka-plan-tip2-3d.jpg'], planNames:['План', '3D-план'], area:'84',     bedrooms:'2',   plot:'6',   price:'12 млн ₽',      note:'Ремонт от 1,6 млн ₽'},
+        {name:'Тип 3', photo:'photos/novrublevochka-tip3.jpg', photos:['photos/novrublevochka-tip3-1.jpg', 'photos/novrublevochka-tip3-2.jpg', 'photos/novrublevochka-tip3-3.jpg', 'photos/novrublevochka-tip3-4.jpg', 'photos/novrublevochka-tip3-5.jpg', 'photos/novrublevochka-tip3-6.jpg'], plans:['photos/novrublevochka-plan-tip3.jpg', 'photos/novrublevochka-plan-tip3-3d.jpg'], planNames:['План', '3D-план'], area:'98',     bedrooms:'3',   plot:'6',   price:'13 млн ₽',      note:'Ремонт от 1,95 млн ₽'},
+        {name:'Тип 4', photo:'photos/novrublevochka-tip4.jpg', photos:['photos/novrublevochka-tip4-1.jpg', 'photos/novrublevochka-tip4-2.jpg'], plans:['photos/novrublevochka-plan-tip4.jpg', 'photos/novrublevochka-plan-tip4-3d.jpg'], planNames:['План', '3D-план'], area:'120',    bedrooms:'3',   plot:'6',   price:'14,5 млн ₽',    note:'Ремонт от 2,3 млн ₽'},
+        {name:'Тип 5', photo:'photos/novrublevochka-tip5.jpg', photos:['photos/novrublevochka-tip5-1.jpg', 'photos/novrublevochka-tip5-2.jpg'], plans:[], area:'120–122', bedrooms:'2–3', plot:'6–8', price:'от 14,5 млн ₽', note:'Ремонт от 2,8 млн ₽'},
+        {name:'Тип 6', photo:'photos/novrublevochka-tip6.jpg', photos:['photos/novrublevochka-tip6-1.jpg', 'photos/novrublevochka-tip6-2.jpg'], plans:['photos/novrublevochka-plan-tip6.jpg', 'photos/novrublevochka-plan-tip6-3d.jpg'], planNames:['План', '3D-план'], area:'148',    bedrooms:'3',   plot:'8',   price:'18 млн ₽',      note:'Ремонт от 3,1 млн ₽'}
+      ],
+      conditionsLead:'Дом мечты может позволить себе каждый',
+      conditionsTitle:'Условия покупки',
+      conditions:[
+        {title:'Сельская ипотека', rate:'3%', text:'Все типы домов подходят под программу.', wide:true},
+        {title:'Без гражданства РФ', text:'Дом можно купить без наличия гражданства РФ.'},
+        {title:'Расчёт в Евросоюзе', text:'Оплату можно провести на территории ЕС.'},
+        {title:'30 минут до границы', text:'До международного автомобильного пункта пропуска Мамоново – Гжехотки.', wide:true}
+      ],
+      // Карта Яндекса: метка посёлка (координаты с rcn39.ru). z — масштаб: больше = ближе
+      map:{z:13, points:[{lat:54.639430, lon:20.368437}]},
+      consultText:'Получить консультацию'
+    },
+    // -------------------------------------------------------------------
     // КОТТЕДЖНЫЙ ПОСЁЛОК «Ласкино Парк». Копия блока «Родников».
     // Источник данных: laskino-park.ru, 22 октября 2026.
     // -------------------------------------------------------------------
@@ -1476,7 +1536,7 @@ var SITE_DATA = {
       // логотип на карусели не показываем (просьба Евгения)
       hideLogo:true,
       addr:'п. Ласкино, ул. 1-я Луговая',
-      clsLabel:'Коттеджный посёлок',
+      clsLabel:'п. Ласкино',
       deadlineShort:'3 типа домов',
       priceFrom:9300000,
       photos:[
@@ -1537,66 +1597,6 @@ var SITE_DATA = {
       ],
       // Карта Яндекса: метка посёлка (координаты от Евгения, 25 октября). z — масштаб: больше = ближе
       map:{z:13, points:[{lat:54.651387, lon:20.420766}]},
-      consultText:'Получить консультацию'
-    },
-    // -------------------------------------------------------------------
-    // КОТТЕДЖНЫЙ ПОСЁЛОК «Новая Рублёвочка». Копия блока «Родников».
-    // Источник данных: рублевочка.рф/nr, 23 октября 2026.
-    // -------------------------------------------------------------------
-    {
-      id:'novrublevochka',
-      section:'cottages',
-      type:'village',
-      name:'Посёлок «Новая Рублёвочка»',
-      // название для заявок; на карусели вместо него картинка-логотип
-      logo:'Новая Рублёвочка',
-      logoImg:'photos/novrublevochka-logo.png',
-      // ширина логотипа на карусели, в пикселях (меньше обычного)
-      logoWidth:150,
-      addr:'п. Голубево, ул. Кофейная, 2',
-      clsLabel:'Коттеджный посёлок',
-      deadlineShort:'6 типов домов',
-      priceFrom:11000000,
-      photos:[
-        'photos/novrublevochka-1.jpg',
-        'photos/novrublevochka-2.jpg',
-        'photos/novrublevochka-3.jpg',
-        'photos/novrublevochka-4.jpg',
-        'photos/novrublevochka-5.jpg',
-        'photos/novrublevochka-6.jpg'
-      ],
-      headline:'6 типов домов',
-      perks:[
-        {icon:'shield', text:'Территория огорожена: КПП, охрана, видеонаблюдение', wide:true},
-        {icon:'tree',   text:'Рядом заповедник Вальдбург'},
-        {icon:'city',   text:'Сквер и гостевая парковка'},
-        {icon:'ball',   text:'Открытые теннисные корты'},
-        {icon:'ball',   text:'Детская футбольная школа'},
-        {icon:'clean',  text:'Управляющая компания: дороги, покос, уборка', wide:true}
-      ],
-      tagline:['Все дома в наличии', 'и готовы к показу'],
-      // note — цена ремонта (на сайте «Ремонт База» и «Ремонт Комфорт»)
-      // кнопки с моделями домов под фразой; карточки домов не показываем
-      houseButtons:true,
-      houseCards:false,
-      houses:[
-        {name:'Тип 1', photo:'photos/novrublevochka-tip1.jpg', photos:['photos/novrublevochka-tip1-1.jpg', 'photos/novrublevochka-tip1-2.jpg', 'photos/novrublevochka-tip1-3.jpg'], plans:['photos/novrublevochka-plan-tip1.jpg', 'photos/novrublevochka-plan-tip1-3d.jpg'], planNames:['План', '3D-план'], area:'77',     bedrooms:'2',   plot:'3',   price:'11 млн ₽',      note:'Ремонт от 1,55 млн ₽'},
-        {name:'Тип 2', photo:'photos/novrublevochka-tip2.jpg', photos:['photos/novrublevochka-tip2-1.jpg', 'photos/novrublevochka-tip2-2.jpg', 'photos/novrublevochka-tip2-3.jpg', 'photos/novrublevochka-tip2-4.jpg', 'photos/novrublevochka-tip2-5.jpg'], plans:['photos/novrublevochka-plan-tip2.jpg', 'photos/novrublevochka-plan-tip2-3d.jpg'], planNames:['План', '3D-план'], area:'84',     bedrooms:'2',   plot:'6',   price:'12 млн ₽',      note:'Ремонт от 1,6 млн ₽'},
-        {name:'Тип 3', photo:'photos/novrublevochka-tip3.jpg', photos:['photos/novrublevochka-tip3-1.jpg', 'photos/novrublevochka-tip3-2.jpg', 'photos/novrublevochka-tip3-3.jpg', 'photos/novrublevochka-tip3-4.jpg', 'photos/novrublevochka-tip3-5.jpg', 'photos/novrublevochka-tip3-6.jpg'], plans:['photos/novrublevochka-plan-tip3.jpg', 'photos/novrublevochka-plan-tip3-3d.jpg'], planNames:['План', '3D-план'], area:'98',     bedrooms:'3',   plot:'6',   price:'13 млн ₽',      note:'Ремонт от 1,95 млн ₽'},
-        {name:'Тип 4', photo:'photos/novrublevochka-tip4.jpg', photos:['photos/novrublevochka-tip4-1.jpg', 'photos/novrublevochka-tip4-2.jpg'], plans:['photos/novrublevochka-plan-tip4.jpg', 'photos/novrublevochka-plan-tip4-3d.jpg'], planNames:['План', '3D-план'], area:'120',    bedrooms:'3',   plot:'6',   price:'14,5 млн ₽',    note:'Ремонт от 2,3 млн ₽'},
-        {name:'Тип 5', photo:'photos/novrublevochka-tip5.jpg', photos:['photos/novrublevochka-tip5-1.jpg', 'photos/novrublevochka-tip5-2.jpg'], plans:[], area:'120–122', bedrooms:'2–3', plot:'6–8', price:'от 14,5 млн ₽', note:'Ремонт от 2,8 млн ₽'},
-        {name:'Тип 6', photo:'photos/novrublevochka-tip6.jpg', photos:['photos/novrublevochka-tip6-1.jpg', 'photos/novrublevochka-tip6-2.jpg'], plans:['photos/novrublevochka-plan-tip6.jpg', 'photos/novrublevochka-plan-tip6-3d.jpg'], planNames:['План', '3D-план'], area:'148',    bedrooms:'3',   plot:'8',   price:'18 млн ₽',      note:'Ремонт от 3,1 млн ₽'}
-      ],
-      conditionsLead:'Дом мечты может позволить себе каждый',
-      conditionsTitle:'Условия покупки',
-      conditions:[
-        {title:'Сельская ипотека', rate:'3%', text:'Все типы домов подходят под программу.', wide:true},
-        {title:'Без гражданства РФ', text:'Дом можно купить без наличия гражданства РФ.'},
-        {title:'Расчёт в Евросоюзе', text:'Оплату можно провести на территории ЕС.'},
-        {title:'30 минут до границы', text:'До международного автомобильного пункта пропуска Мамоново – Гжехотки.', wide:true}
-      ],
-      // Карта Яндекса: метка посёлка (координаты с rcn39.ru). z — масштаб: больше = ближе
-      map:{z:13, points:[{lat:54.639430, lon:20.368437}]},
       consultText:'Получить консультацию'
     }
   ]
