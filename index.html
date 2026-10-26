@@ -1238,11 +1238,11 @@
       + '<div class="plan-hint">Нажмите на план, чтобы увеличить</div>'
       + '<div class="plan-facts">'
         + '<span>'+esc(p.area)+' м²</span>'
-        + '<span>'+esc(p.floor)+' этаж</span>'
+        + (p.floor ? '<span>'+esc(p.floor)+' этаж</span>' : '')
         + (p.building ? '<span>корп. '+esc(p.building)+'</span>' : '')
         + (p.deadline ? '<span>'+(/сдан/i.test(p.deadline) ? 'дом сдан' : 'сдача '+esc(p.deadline))+'</span>' : '')
       + '</div>'
-      + '<div class="price-row total"><span class="l">Цена этой квартиры</span><span class="v">'+esc(p.price)+'</span></div>'
+      + (p.price ? '<div class="price-row total"><span class="l">Цена этой квартиры</span><span class="v">'+esc(p.price)+'</span></div>' : '')
       + '</div>';
   }
 
@@ -1289,7 +1289,7 @@
     var r = c.rooms.filter(function(x){ return x.key === key; })[0];
     if (!r) return '';
     // если у комнатности есть пример планировки — риелтор увидит, какая именно квартира
-    if (r.plan) return r.label + ' ' + r.plan.area + ' м², ' + r.plan.floor + ' этаж'
+    if (r.plan) return r.label + ' ' + r.plan.area + ' м²' + (r.plan.floor ? ', ' + r.plan.floor + ' этаж' : '')
       + (r.plan.building ? ', корп. ' + r.plan.building : '') + (r.plan.flat ? ', кв. ' + r.plan.flat : '');
     return r.label;
   }
