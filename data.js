@@ -143,11 +143,19 @@ var SITE_DATA = {
 ,
     {
       id:'cottages',
-      tab:'🏡 Коттеджные посёлки',
+      tab:'🏡 Коттеджи',
       eyebrow:'Калининградская область · Посёлки',
       title:'Коттеджные посёлки',
       intro:'Дома и участки в коттеджных посёлках рядом с Калининградом.',
       emptyText:'Посёлки скоро появятся здесь. Напишите — подберу варианты лично.'
+    },
+    {
+      id:'resale',
+      tab:'🔑 Вторичка',
+      eyebrow:'Калининградская область · Вторичное жильё',
+      title:'Готовые квартиры и дома',
+      intro:'Мои актуальные объекты на вторичном рынке.',
+      emptyText:'Объекты скоро появятся здесь. Напишите — подберу варианты лично.'
     }
   ],
 
@@ -1662,6 +1670,69 @@ var SITE_DATA = {
       // Карта Яндекса: метка посёлка (координаты от Евгения, 25 октября). z — масштаб: больше = ближе
       map:{z:13, points:[{lat:54.651387, lon:20.420766}]},
       consultText:'Получить консультацию'
+    },
+
+    // ВТОРИЧКА (section:'resale') — объявления риелтора, порядок как здесь.
+    // Чтобы добавить объект — скопируйте блок от «{» до «},» и замените данные.
+    // type:'listing' — обязательно. badge — плашка на фото карточки,
+    // price — цена числом, facts — 4 клетки (v — крупно, l — подпись),
+    // text — описание (абзацы через пустую строку \n\n).
+    // Объект продан — удалите блок (или поставьте sold:true, тогда скроется).
+    {
+      id:'krasnoe-dom',
+      type:'listing',
+      section:'resale',
+      name:'Дом 100 м² на 52 сотках',
+      addr:'пос. Красное, Правдинский округ',
+      badge:'Дом · 100 м²',
+      price:3500000,
+      short:'Кирпич · гараж · 4 комнаты',
+      facts:[
+        {v:'100 м²', l:'4 комнаты'},
+        {v:'52 сот.', l:'ИЖС'},
+        {v:'Кирпич', l:'дом 1990 г.'},
+        {v:'Печь', l:'отопление'}
+      ],
+      text:'Добротный дом из немецкого кирпича с чердаком. Подойдёт для постоянной жизни, дачи или семейного хозяйства.\n\n'
+        + 'В доме: кухня-гостиная, 3 спальни (одна проходная), санузел, гардеробная, котельная.\n\n'
+        + 'Участок 52 сотки, земля плодородная. На участке гараж, летняя кухня, мангальная зона, сарай, смородина, черешня, сливы, виноград.\n\n'
+        + 'Посёлок с асфальтированной дорогой: рядом школа, дом культуры, медпункт, вокзал. До Калининграда и Черняховска ходит прямой автобус № 567а.',
+      photos:[
+        'photos/krasnoe-1.jpg',
+        'photos/krasnoe-2.jpg',
+        'photos/krasnoe-3.jpg',
+        'photos/krasnoe-4.jpg',
+        'photos/krasnoe-5.jpg',
+        'photos/krasnoe-6.jpg',
+        'photos/krasnoe-7.jpg',
+        'photos/krasnoe-8.jpg',
+        'photos/krasnoe-9.jpg',
+        'photos/krasnoe-10.jpg',
+        'photos/krasnoe-11.jpg',
+        'photos/krasnoe-12.jpg',
+        'photos/krasnoe-13.jpg',
+        'photos/krasnoe-14.jpg',
+        'photos/krasnoe-15.jpg',
+        'photos/krasnoe-16.jpg',
+        'photos/krasnoe-17.jpg',
+        'photos/krasnoe-18.jpg',
+        'photos/krasnoe-19.jpg',
+        'photos/krasnoe-20.jpg',
+        'photos/krasnoe-21.jpg',
+        'photos/krasnoe-22.jpg',
+        'photos/krasnoe-23.jpg',
+        'photos/krasnoe-24.jpg',
+        'photos/krasnoe-25.jpg',
+        'photos/krasnoe-26.jpg',
+        'photos/krasnoe-27.jpg',
+        'photos/krasnoe-28.jpg',
+        'photos/krasnoe-29.jpg',
+        'photos/krasnoe-30.jpg',
+        'photos/krasnoe-31.jpg',
+        'photos/krasnoe-32.jpg',
+        'photos/krasnoe-33.jpg',
+        'photos/krasnoe-34.jpg'
+      ]
     }
   ]
 };
