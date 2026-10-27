@@ -160,6 +160,14 @@
   .pt-dots{display:flex; gap:5px; justify-content:center}
   .pt-dots u{width:6px; height:6px; border-radius:3px; background:#5a4d40; transition:width .2s}
   .pt-dots u.on{width:16px; background:#D6B779}
+  .pt-nav{display:flex; align-items:center; justify-content:center; gap:14px}
+  .pt-arr{
+    width:34px; height:34px; border-radius:50%; display:grid; place-items:center; cursor:pointer;
+    border:2px solid transparent; color:#7a5a12; font:700 22px/1 sans-serif; padding:0 0 3px;
+    background:linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg,#F3D57A,#B8860B 45%,#F7E39A 70%,#A8761C) border-box;
+    box-shadow:0 2px 8px rgba(184,134,11,.25);
+  }
+  .pt-arr:disabled{opacity:.35; cursor:default}
 
   .list{display:flex; flex-direction:column; gap:12px; padding:16px 0 28px}
 
@@ -799,12 +807,27 @@
       var dots = document.createElement('div');
       dots.className = 'pt-dots';
       points.forEach(function(_, i){ var u = document.createElement('u'); if (!i) u.className = 'on'; dots.appendChild(u); });
-      pointsEl.appendChild(dots);
+      // стрелки по бокам от точек — чтобы листать мышкой (Telegram на компьютере, сайт)
+      var nav = document.createElement('div');
+      nav.className = 'pt-nav';
+      nav.innerHTML = '<button type="button" class="pt-arr" aria-label="Назад">‹</button>';
+      nav.appendChild(dots);
+      nav.insertAdjacentHTML('beforeend', '<button type="button" class="pt-arr" aria-label="Вперёд">›</button>');
+      var arrows = nav.querySelectorAll('.pt-arr');
+      [-1, 1].forEach(function(dir, i){
+        arrows[i].addEventListener('click', function(){
+          row.scrollBy({left: dir * (row.firstChild.offsetWidth + 10), behavior:'smooth'});
+        });
+      });
+      arrows[0].disabled = true;
+      pointsEl.appendChild(nav);
       row.addEventListener('scroll', function(){
         var w = row.firstChild.offsetWidth + 10;
         var max = row.scrollWidth - row.clientWidth;
         var k = row.scrollLeft >= max - 2 ? points.length - 1 : Math.round(row.scrollLeft / w);
         [].forEach.call(dots.children, function(u, i){ u.className = i === k ? 'on' : ''; });
+        arrows[0].disabled = row.scrollLeft < 2;
+        arrows[1].disabled = row.scrollLeft >= max - 2;
       }, {passive:true});
     }
     intro.textContent = sec.intro || SETTINGS.intro || intro.textContent;
