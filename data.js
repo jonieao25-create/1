@@ -43,7 +43,7 @@ var SITE_DATA = {
     agent: {
       name: 'Евгений',
       role: 'Ваш риелтор в Калининграде',
-      photo: '',
+      photo: 'photos/agent.jpg',
       button: 'Написать'
     },
 
