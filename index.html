@@ -97,6 +97,15 @@
 
   /* ---- Home ---- */
   .home-head{padding:18px 0 6px}
+  /* карточка риелтора на главной (settings.agent в data.js) */
+  .agent{display:flex; align-items:center; gap:12px; margin:14px 0 16px; padding:12px; background:var(--bg-elevated); border:1px solid var(--border); border-radius:16px}
+  .agent[hidden]{display:none}
+  .agent img, .agent .ini{flex:none; width:56px; height:56px; border-radius:50%; object-fit:cover}
+  .agent .ini{display:flex; align-items:center; justify-content:center; background:var(--accent); color:var(--accent-ink); font-weight:800; font-size:22px}
+  .agent .who{flex:1; min-width:0}
+  .agent .nm{font-weight:800; font-size:15px}
+  .agent .rl{color:var(--fg-muted); font-size:12.5px; margin-top:2px}
+  .agent button{flex:none; border:0; border-radius:10px; padding:10px 14px; font:inherit; font-size:13.5px; font-weight:700; cursor:pointer; background:var(--accent); color:var(--accent-ink)}
   .home-head .eyebrow{font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); font-weight:700}
   .home-head h1{font-size:clamp(21px, 6.4vw, 26px); margin-top:6px; line-height:1.14; letter-spacing:-0.01em}
   .home-head p{color:var(--fg-muted); font-size:14px; margin-top:8px; line-height:1.5}
@@ -452,6 +461,7 @@
   <section id="view-home">
     <div class="sec-tabs" id="secTabs"></div>
     <div class="home-head">
+      <div class="agent" id="agent" hidden></div>
       <div class="eyebrow">Калининград · Новостройки</div>
       <h1>Подбор квартир без комиссии</h1>
       <div class="points" id="points" hidden></div>
@@ -1453,6 +1463,21 @@
     }
     var cta = document.getElementById('ctaBtn');
     if (SETTINGS.ctaText && cta) cta.textContent = SETTINGS.ctaText;
+
+    // Карточка риелтора на главной: фото, имя, кнопка «Написать».
+    // Нет фото — в кружке первая буква имени.
+    var A = SETTINGS.agent, agentEl = document.getElementById('agent');
+    if (A && agentEl){
+      agentEl.innerHTML = (A.photo ? '<img src="' + esc(A.photo) + '" alt="">'
+          : '<div class="ini">' + esc((A.name || '?').charAt(0)) + '</div>')
+        + '<div class="who"><div class="nm">' + esc(A.name || '') + '</div>'
+        + (A.role ? '<div class="rl">' + esc(A.role) + '</div>' : '') + '</div>'
+        + '<button type="button">' + esc(A.button || 'Написать') + '</button>';
+      agentEl.querySelector('button').addEventListener('click', function(){
+        openManagerChat('Здравствуйте! Хочу подобрать недвижимость.');
+      });
+      agentEl.hidden = false;
+    }
   })();
 
   // ---------- Telegram Mini App integration ----------
