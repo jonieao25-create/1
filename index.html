@@ -125,6 +125,7 @@
   .svc-sheet li:before{content:'✓'; color:var(--accent); font-weight:800}
   .svc-sheet .price{background:var(--accent-soft); color:var(--accent); border-radius:10px; padding:8px 10px; font-size:13px; font-weight:700}
   .home-head .eyebrow{font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); font-weight:700}
+  .home-head .eyebrow.below{margin-top:16px}
   .home-head h1{font-size:clamp(21px, 6.4vw, 26px); margin-top:6px; line-height:1.14; letter-spacing:-0.01em}
   .home-head p{color:var(--fg-muted); font-size:14px; margin-top:8px; line-height:1.5}
 
@@ -762,6 +763,10 @@
     var pointsEl = document.getElementById('points');
     var points = sec.points || [];
     h1.hidden = points.length > 0;
+    // при плашках надпись раздела стоит ниже них — сразу перед карточками ЖК
+    var head = document.querySelector('.home-head');
+    head.insertBefore(eyebrow, points.length ? intro : h1);
+    eyebrow.classList.toggle('below', points.length > 0);
     pointsEl.hidden = !points.length;
     pointsEl.innerHTML = '';
     if (points.length && sec.slogan){
