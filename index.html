@@ -450,6 +450,17 @@
   .v-house h3{margin:4px 0 0; font:800 20px/1.15 'Unbounded', 'Arial Black', sans-serif; text-transform:uppercase}
   .v-house .facts{font-size:16px; line-height:1.55}
   .v-house .price{font:800 19px 'Unbounded', 'Arial Black', sans-serif}
+  /* объявление во «Вторичке» (type:'listing' в data.js) — та же страница, что у дома */
+  .l-addr{display:flex; align-items:center; gap:6px; margin-top:-6px; font-size:14px; color:var(--fg-muted)}
+  .l-facts{grid-template-columns:1fr 1fr}
+  .l-facts .fact{text-align:left; padding:11px 12px}
+  .l-facts .fact .v{font-size:16px}
+  .l-facts .fact .l{font-size:12px}
+  .l-text p{margin:0 0 10px; font-size:15px; line-height:1.5}
+  .l-agent{display:flex; align-items:center; gap:12px; padding:12px; background:var(--bg-elevated); border:1px solid var(--border); border-radius:16px}
+  .l-agent img, .l-agent .ini{flex:none; width:48px; height:48px; border-radius:50%; object-fit:cover}
+  .l-agent .ini{display:flex; align-items:center; justify-content:center; background:var(--accent); color:var(--accent-ink); font-weight:800; font-size:20px}
+  .l-agent .nm{font-weight:800; font-size:16px}
   .h-note{align-self:flex-start; background:var(--accent-soft); border-radius:8px; padding:6px 10px; font-size:14px; font-weight:700}
   .v-house .note{align-self:flex-start; background:var(--accent-soft); border-radius:8px; padding:6px 10px; font-size:14px; font-weight:700}
   /* кнопки домов под крупной фразой посёлка */
@@ -659,6 +670,10 @@
     <div class="h-price" id="hPrice"></div>
     <div class="h-facts" id="hFacts"></div>
     <div class="h-note" id="hNote" hidden></div>
+    <div class="l-addr" id="hAddr" hidden></div>
+    <div class="quickfacts l-facts" id="hLFacts" hidden></div>
+    <div class="l-text" id="hText" hidden></div>
+    <div class="l-agent" id="hAgent" hidden></div>
     <div id="hRoomsBox">
       <h3 class="h-sub">Площади помещений</h3>
       <div class="h-rooms" id="hRooms" style="margin-top:10px"></div>
@@ -833,7 +848,7 @@
     intro.textContent = sec.intro || SETTINGS.intro || intro.textContent;
 
     listEl.innerHTML = '';
-    var items = complexes.filter(function(c){ return sectionOf(c) === sectionId; });
+    var items = complexes.filter(function(c){ return sectionOf(c) === sectionId && !c.sold; });
 
     if (!items.length){
       var empty = document.createElement('div');
@@ -857,20 +872,20 @@
               + '<span class="card-photo-count">'+c.photos.length+' фото</span>'
           : '<div class="card-art" style="--art-bg:'+c.artHue+'; color:var(--accent)">' + buildingArt(c.name.length + i)
         )
-          + '<span class="class-badge'+(c.cls==='econom'?' econom':'')+'">'+c.clsLabel+'</span>'
+          + '<span class="class-badge'+(c.cls==='econom'?' econom':'')+'">'+(c.type === 'listing' ? esc(c.badge || '') : c.clsLabel)+'</span>'
         + '</div>'
         + '<div class="card-body">'
           + '<div class="card-title">'+c.name+'</div>'
           + '<div class="card-addr">'
             + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-7.2 7-12a7 7 0 10-14 0c0 4.8 7 12 7 12z" stroke="currentColor" stroke-width="2"/></svg>'
-            + '<span>'+c.addr+'</span>'
+            + '<span>'+c.addr+(c.type === 'listing' && c.short ? ' · ' + esc(c.short) : '')+'</span>'
           + '</div>'
           + '<div class="card-foot">'
             + '<div>'
-              + '<div class="card-price-label">Цена от</div>'
-              + '<div class="card-price">'+(c.priceFrom ? fmtRub(c.priceFrom) : 'уточняется')+'</div>'
+              + '<div class="card-price-label">'+(c.type === 'listing' ? 'Цена' : 'Цена от')+'</div>'
+              + '<div class="card-price">'+((c.type === 'listing' ? c.price : c.priceFrom) ? fmtRub(c.type === 'listing' ? c.price : c.priceFrom) : 'уточняется')+'</div>'
             + '</div>'
-            + '<div class="card-deadline">'+c.deadlineShort+'</div>'
+            + '<div class="card-deadline">'+(c.deadlineShort || '')+'</div>'
           + '</div>'
         + '</div>';
       card.addEventListener('click', function(){ openDetail(c.id); });
@@ -953,6 +968,7 @@
   function openDetail(id){
     var c = byId[id];
     if (c.type === 'village') return openVillage(c);
+    if (c.type === 'listing') return openListing(c);
     document.getElementById('dTitle').textContent = c.name;
     document.getElementById('dSub').textContent = c.developer;
     document.getElementById('dName').textContent = c.name;
@@ -1230,7 +1246,7 @@
   }
   document.getElementById('hPrev').addEventListener('click', function(){ hStep(-1); });
   document.getElementById('hNext').addEventListener('click', function(){ hStep(1); });
-  document.getElementById('hBackBtn').addEventListener('click', backToVillage);
+  document.getElementById('hBackBtn').addEventListener('click', function(){ goBack(); });
 
   function openHouse(c, h){
     var short = c.logo || c.name;
@@ -1281,10 +1297,72 @@
     }).join('');
 
     ctaTarget = { name: 'посёлок ' + short + ', ' + full.charAt(0).toLowerCase() + full.slice(1), room: '' };
+    hideListingBlocks();
 
     viewVillage.hidden = true;
     viewHouse.hidden = false;
     window.scrollTo(0, 0);
+  }
+
+  // ---------- объявление во «Вторичке» ----------
+  // Показываем на той же странице, что и дом в посёлке, только свои блоки.
+  var listingOpen = false, ctaDefault = '';
+  function openListing(c){
+    listingOpen = true;
+    document.getElementById('hTopTitle').textContent = c.name;
+    document.getElementById('hTopSub').textContent = c.addr || '';
+
+    var photos = c.photos || [];
+    hSlides.innerHTML = photos.map(function(p){ return '<div class="v-slide" style="background-image:url(\'' + p + '\')"></div>'; }).join('');
+    hSlides.scrollLeft = 0;
+    document.getElementById('hCount').textContent = photos.length ? '1/' + photos.length : '';
+    document.getElementById('hPrev').hidden = document.getElementById('hNext').hidden = photos.length < 2;
+
+    document.getElementById('hTitle').textContent = c.name;
+    document.getElementById('hPrice').textContent = c.price ? fmtRub(c.price) : '';
+    document.getElementById('hNote').hidden = true;
+    document.getElementById('hFacts').innerHTML = '';
+    var addr = document.getElementById('hAddr');
+    addr.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-7.2 7-12a7 7 0 10-14 0c0 4.8 7 12 7 12z" stroke="currentColor" stroke-width="2"/></svg><span></span>';
+    addr.querySelector('span').textContent = c.addr || '';
+    addr.hidden = !c.addr;
+
+    var facts = c.facts || [], lf = document.getElementById('hLFacts');
+    lf.innerHTML = facts.map(function(f){ return '<div class="fact"><div class="v">' + esc(f.v) + '</div><div class="l">' + esc(f.l || '') + '</div></div>'; }).join('');
+    lf.hidden = !facts.length;
+    var tx = document.getElementById('hText');
+    tx.innerHTML = (c.text || '').split(/\n\s*\n/).filter(Boolean).map(function(p){ return '<p>' + esc(p) + '</p>'; }).join('');
+    tx.hidden = !c.text;
+
+    // плашка риелтора: фото и только имя (settings.agent в data.js)
+    var A = SETTINGS.agent, ag = document.getElementById('hAgent');
+    if (A && A.name){
+      ag.innerHTML = (A.photo ? '<img src="' + esc(A.photo) + '" alt="">' : '<div class="ini">' + esc(A.name.charAt(0)) + '</div>')
+        + '<div class="nm">' + esc(A.name) + '</div>';
+      ag.hidden = false;
+    } else ag.hidden = true;
+
+    document.getElementById('hRoomsBox').hidden = true;
+    document.getElementById('hPlanBox').hidden = true;
+    document.getElementById('hSpecsBox').hidden = true;
+
+    ctaTarget = { name: c.name.charAt(0).toLowerCase() + c.name.slice(1) + (c.addr ? ', ' + c.addr : ''), room: '' };
+    var cta = document.getElementById('ctaBtn');
+    ctaDefault = cta.textContent;
+    cta.textContent = 'Записаться на просмотр';
+
+    if (TG){
+      if (TG.BackButton) TG.BackButton.show();
+      if (TG.HapticFeedback) { try { TG.HapticFeedback.impactOccurred('light'); } catch(e){} }
+    }
+    ctaBar.hidden = false;
+    viewHome.hidden = true;
+    viewHouse.hidden = false;
+    window.scrollTo(0, 0);
+  }
+  // у дома в посёлке этих блоков нет
+  function hideListingBlocks(){
+    ['hAddr', 'hLFacts', 'hText', 'hAgent'].forEach(function(id){ document.getElementById(id).hidden = true; });
   }
 
   function backToVillage(){
@@ -1294,7 +1372,7 @@
     window.scrollTo(0, villageScroll);
   }
   // кнопка «Назад» Telegram: со страницы дома — в посёлок, иначе — на главную
-  function goBack(){ if (!viewHouse.hidden) backToVillage(); else goHome(); }
+  function goBack(){ if (!viewHouse.hidden && !listingOpen) backToVillage(); else goHome(); }
 
   // Карта Яндекса: блок с картой + кнопка «Открыть в Яндекс Картах».
   // m = {z, points:[{lat,lon}]} из data.js. Метки виджет показывает без номеров.
@@ -1392,6 +1470,11 @@
   }
 
   function goHome(){
+    if (listingOpen){
+      listingOpen = false;
+      document.getElementById('ctaBtn').textContent = ctaDefault;
+      window.scrollTo(0, 0);
+    }
     viewDetail.hidden = true;
     viewVillage.hidden = true;
     viewHouse.hidden = true;
