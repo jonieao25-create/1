@@ -11,6 +11,16 @@
 //                    Worker узнаёт, что сообщение пришло именно от Telegram
 //   APP_URL        — адрес мини-приложения
 //   MANAGER        — ваш ник в Telegram без @ (для кнопки «Связаться»)
+//
+// Третье дело — бот-секретарь (Telegram для бизнеса → Автоматизация чатов).
+// Бот отвечает клиентам в ваших личных чатах от вашего имени:
+//   • новому клиенту на первое сообщение (в любое время);
+//   • любому клиенту с 20:00 до 7:00 по Калининграду;
+//   • одному человеку не чаще раза в сутки.
+// После ответа бот присылает вам уведомление.
+//   REPLIES     — хранилище KV (Cloudflare → Storage → KV), привязанное к Worker
+//                 под этим именем: бот помнит, кому уже отвечал
+//   BOT_LINK    — ссылка, которую открывает кнопка «Открыть каталог»
 
 const MAX_AGE_SEC = 24 * 60 * 60;
 
@@ -115,6 +125,78 @@ async function handleBotUpdate(update, env) {
   });
 }
 
+// ---------- бот-секретарь ----------
+
+const NIGHT_FROM = 20; // с 20:00
+const NIGHT_TO = 7;    // до 7:00
+const TZ_OFFSET = 2;   // Калининград: UTC+2 (летнего времени нет)
+const DAY_SEC = 24 * 60 * 60;
+
+const SECRETARY_TEXT =
+  'Здравствуйте! Я Евгений, риелтор по новостройкам Калининграда. ' +
+  'Сейчас не могу ответить, напишу вам в ближайшее время. ' +
+  'А пока можете посмотреть каталог ЖК и коттеджных посёлков 👇';
+
+function isNight() {
+  const hour = (new Date().getUTCHours() + TZ_OFFSET) % 24;
+  return hour >= NIGHT_FROM || hour < NIGHT_TO;
+}
+
+// Подключение принадлежит именно Евгению? Иначе любой мог бы подключить
+// этого бота к своему аккаунту и рассылать наш текст от своего имени.
+async function isOwnConnection(id, env) {
+  const key = `conn:${id}`;
+  const saved = await env.REPLIES.get(key);
+  if (saved) return saved === '1';
+  const r = await tgApi(env, 'getBusinessConnection', { business_connection_id: id });
+  const data = await r.json().catch(() => ({}));
+  const ok = data.ok && String(data.result.user.id) === String(env.MANAGER_ID);
+  await env.REPLIES.put(key, ok ? '1' : '0', { expirationTtl: DAY_SEC });
+  return ok;
+}
+
+async function handleBusinessMessage(msg, env) {
+  if (!env.REPLIES || !msg.chat || !msg.from || msg.from.is_bot) return;
+  if (msg.chat.type !== 'private') return;
+  if (!(await isOwnConnection(msg.business_connection_id, env))) return;
+
+  const seenKey = `seen:${msg.chat.id}`;
+  const lastKey = `last:${msg.chat.id}`;
+
+  // Пишет сам Евгений: запоминаем, что с этим человеком уже общались
+  if (String(msg.from.id) === String(env.MANAGER_ID)) {
+    await env.REPLIES.put(seenKey, '1');
+    return;
+  }
+
+  const isNew = !(await env.REPLIES.get(seenKey));
+  if (isNew) await env.REPLIES.put(seenKey, '1');
+
+  if (!isNew && !isNight()) return;
+  if (await env.REPLIES.get(lastKey)) return; // уже отвечали за последние сутки
+
+  const sent = await tgApi(env, 'sendMessage', {
+    business_connection_id: msg.business_connection_id,
+    chat_id: msg.chat.id,
+    text: SECRETARY_TEXT,
+    reply_markup: {
+      inline_keyboard: [[{ text: '🏠 Открыть каталог', url: env.BOT_LINK }]],
+    },
+  });
+  if (!sent.ok) return;
+  await env.REPLIES.put(lastKey, '1', { expirationTtl: DAY_SEC });
+
+  const u = msg.from;
+  const name = esc([u.first_name, u.last_name].filter(Boolean).join(' ') || 'клиент');
+  const who = u.username ? `${name} (@${esc(u.username)})` : `<a href="tg://user?id=${u.id}">${name}</a>`;
+  await tgApi(env, 'sendMessage', {
+    chat_id: env.MANAGER_ID,
+    text: `🤖 Бот-секретарь ответил: ${who}\n` +
+      (isNew ? 'Причина: новый клиент' : 'Причина: нерабочее время (20:00–7:00)'),
+    parse_mode: 'HTML',
+  });
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -126,7 +208,9 @@ export default {
         return new Response('forbidden', { status: 403 });
       }
       try {
-        await handleBotUpdate(await request.json(), env);
+        const update = await request.json();
+        if (update.business_message) await handleBusinessMessage(update.business_message, env);
+        else await handleBotUpdate(update, env);
       } catch (e) {
         // отвечаем 200 в любом случае, иначе Telegram будет слать то же сообщение снова
       }
@@ -142,7 +226,7 @@ export default {
       const r = await tgApi(env, 'setWebhook', {
         url: `${url.origin}/tg`,
         secret_token: env.WEBHOOK_SECRET,
-        allowed_updates: ['message'],
+        allowed_updates: ['message', 'business_message'],
       });
       return new Response(await r.text(), {
         headers: { 'Content-Type': 'application/json; charset=utf-8' },

@@ -6,6 +6,13 @@ compatibility_date = "2026-10-01"
 ALLOWED_ORIGIN = "https://jonieao25-create.github.io"
 APP_URL = "https://jonieao25-create.github.io/1/"
 MANAGER = "Evgeniy_Rieltor_KLD"
+BOT_LINK = "https://t.me/Evgeniy_Rieltor_KLD_bot/novostroy"
+
+# Хранилище для бота-секретаря (кому уже отвечали).
+# id берётся в Cloudflare → Storage → KV после создания хранилища.
+[[kv_namespaces]]
+binding = "REPLIES"
+id = "[уточнить]"
 
 # Секреты задаются командами (в файл их не записывать):
 #   npx wrangler secret put BOT_TOKEN
