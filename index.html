@@ -128,17 +128,37 @@
   .home-head h1{font-size:clamp(21px, 6.4vw, 26px); margin-top:6px; line-height:1.14; letter-spacing:-0.01em}
   .home-head p{color:var(--fg-muted); font-size:14px; margin-top:8px; line-height:1.5}
 
-  /* плашки-преимущества вместо заголовка (points в data.js) */
-  .points{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px}
+  /* плашки-преимущества вместо заголовка (points и slogan в data.js):
+     сверху золотая фраза, под ней лента белых квадратов, листается вбок */
+  .points{display:flex; flex-direction:column; gap:10px; margin-top:12px}
   .points[hidden]{display:none}
+  .slogan{
+    display:flex; gap:10px; align-items:center; border-radius:14px; padding:16px;
+    color:#1b1406; font-size:15px; line-height:1.35; font-weight:800;
+    background:linear-gradient(135deg,#F7E39A,#D4A73C 45%,#F3D57A 70%,#B8860B);
+    box-shadow:0 4px 14px rgba(184,134,11,.35);
+  }
+  .slogan i{font-style:normal; font-size:24px; flex:0 0 auto}
+  .pt-row{
+    display:flex; gap:10px; overflow-x:auto; scroll-snap-type:x mandatory;
+    /* отступы, чтобы золотая тень не обрезалась краем ленты */
+    margin:-4px -16px -6px 0; padding:4px 16px 10px 0; scrollbar-width:none;
+  }
+  .pt-row::-webkit-scrollbar{display:none}
   .point{
     /* белая плашка в золотой «металлической» рамке, как у «Наших услуг» */
-    color:#111; border-radius:14px; padding:12px 10px; border:2px solid transparent;
+    flex:0 0 42%; aspect-ratio:1/1; scroll-snap-align:start;
+    display:flex; flex-direction:column; color:#111; border-radius:14px; padding:12px 11px;
+    border:2px solid transparent;
     background:linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg,#F3D57A,#B8860B 45%,#F7E39A 70%,#A8761C) border-box;
     box-shadow:0 3px 10px rgba(184,134,11,.22);
-    font-size:11.5px; line-height:1.35; font-weight:800;
-    text-transform:uppercase; letter-spacing:.03em;
   }
+  .point i{font-style:normal; font-size:28px; line-height:1; margin-bottom:8px}
+  .point b{display:block; font-size:13px; line-height:1.25; font-weight:800; text-transform:uppercase; letter-spacing:.02em}
+  .point span{display:block; margin-top:5px; font-size:12px; line-height:1.4; font-weight:600; color:#3a3530}
+  .pt-dots{display:flex; gap:5px; justify-content:center}
+  .pt-dots u{width:6px; height:6px; border-radius:3px; background:#5a4d40; transition:width .2s}
+  .pt-dots u.on{width:16px; background:#D6B779}
 
   .list{display:flex; flex-direction:column; gap:12px; padding:16px 0 28px}
 
@@ -744,12 +764,44 @@
     h1.hidden = points.length > 0;
     pointsEl.hidden = !points.length;
     pointsEl.innerHTML = '';
+    if (points.length && sec.slogan){
+      // если фраза начинается со значка — выносим его отдельно слева
+      var sm = sec.slogan.match(/^(\S+)\s+(.*)$/);
+      var sl = document.createElement('div');
+      sl.className = 'slogan';
+      if (sm && !/[A-Za-zА-Яа-яЁё0-9]/.test(sm[1])){
+        sl.innerHTML = '<i></i><div></div>';
+        sl.querySelector('i').textContent = sm[1];
+        sl.querySelector('div').textContent = sm[2];
+      } else sl.textContent = sec.slogan;
+      pointsEl.appendChild(sl);
+    }
+    var row = document.createElement('div');
+    row.className = 'pt-row';
     points.forEach(function(t){
       var d = document.createElement('div');
       d.className = 'point';
-      d.textContent = t;
-      pointsEl.appendChild(d);
+      if (typeof t === 'string') t = {title: t};
+      d.innerHTML = (t.icon ? '<i></i>' : '') + '<b></b>' + (t.text ? '<span></span>' : '');
+      if (t.icon) d.querySelector('i').textContent = t.icon;
+      d.querySelector('b').textContent = t.title || '';
+      if (t.text) d.querySelector('span').textContent = t.text;
+      row.appendChild(d);
     });
+    if (points.length) pointsEl.appendChild(row);
+    // точки под лентой: подсвечиваем ту плашку, что сейчас слева
+    if (points.length > 2){
+      var dots = document.createElement('div');
+      dots.className = 'pt-dots';
+      points.forEach(function(_, i){ var u = document.createElement('u'); if (!i) u.className = 'on'; dots.appendChild(u); });
+      pointsEl.appendChild(dots);
+      row.addEventListener('scroll', function(){
+        var w = row.firstChild.offsetWidth + 10;
+        var max = row.scrollWidth - row.clientWidth;
+        var k = row.scrollLeft >= max - 2 ? points.length - 1 : Math.round(row.scrollLeft / w);
+        [].forEach.call(dots.children, function(u, i){ u.className = i === k ? 'on' : ''; });
+      }, {passive:true});
+    }
     intro.textContent = sec.intro || SETTINGS.intro || intro.textContent;
 
     listEl.innerHTML = '';
