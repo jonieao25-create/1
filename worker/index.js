@@ -90,14 +90,17 @@ function tgApi(env, method, body) {
 
 const CONTACT_BTN = '📞 Связаться';
 
-// Клавиатура 2×2. Кнопка с web_app открывает мини-приложение
-// сразу на нужном разделе (?section=... — id раздела из data.js).
+// Клавиатура: разделы 2×2 и широкая зелёная «Связаться» внизу.
+// Кнопка с web_app открывает мини-приложение сразу на нужном разделе
+// (?section=... — id раздела из data.js). style:'success' — зелёная кнопка
+// (Telegram даёт только 3 цвета: success — зелёный, primary — синий, danger — красный).
 function mainKeyboard(env) {
   const app = (section) => ({ web_app: { url: `${env.APP_URL}?section=${section}` } });
   return {
     keyboard: [
       [{ text: '🏢 Новостройки', ...app('newbuilds') }, { text: '🏡 Коттеджные посёлки', ...app('cottages') }],
-      [{ text: '🌊 ЖК на Побережье', ...app('coast') }, { text: CONTACT_BTN }],
+      [{ text: '🌊 ЖК на Побережье', ...app('coast') }, { text: '🔑 Вторичка', ...app('resale') }],
+      [{ text: CONTACT_BTN, style: 'success' }],
     ],
     resize_keyboard: true,
     is_persistent: true,
