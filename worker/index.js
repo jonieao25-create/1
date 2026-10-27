@@ -14,7 +14,8 @@
 //
 // Третье дело — бот-секретарь (Telegram для бизнеса → Автоматизация чатов).
 // Бот отвечает клиентам в ваших личных чатах от вашего имени:
-//   • новому клиенту на первое сообщение (в любое время);
+//   • новому клиенту на первое сообщение (в любое время); «новый» — тот,
+//     с кем не было переписки последние 20 дней;
 //   • любому клиенту с 20:00 до 7:00 по Калининграду;
 //   • одному человеку не чаще раза в сутки.
 // После ответа бот присылает вам уведомление.
@@ -131,6 +132,7 @@ const NIGHT_FROM = 20; // с 20:00
 const NIGHT_TO = 7;    // до 7:00
 const TZ_OFFSET = 2;   // Калининград: UTC+2 (летнего времени нет)
 const DAY_SEC = 24 * 60 * 60;
+const NEW_AFTER_SEC = 20 * DAY_SEC; // молчал 20 дней — снова «новый клиент»
 
 const SECRETARY_TEXT =
   'Здравствуйте! Я Евгений, риелтор по новостройкам Калининграда. ' +
@@ -163,14 +165,12 @@ async function handleBusinessMessage(msg, env) {
   const seenKey = `seen:${msg.chat.id}`;
   const lastKey = `last:${msg.chat.id}`;
 
-  // Пишет сам Евгений: запоминаем, что с этим человеком уже общались
-  if (String(msg.from.id) === String(env.MANAGER_ID)) {
-    await env.REPLIES.put(seenKey, '1');
-    return;
-  }
-
+  // Любое сообщение в чате (клиента или Евгения) продлевает «знакомство» на 20 дней
   const isNew = !(await env.REPLIES.get(seenKey));
-  if (isNew) await env.REPLIES.put(seenKey, '1');
+  await env.REPLIES.put(seenKey, '1', { expirationTtl: NEW_AFTER_SEC });
+
+  // Пишет сам Евгений: только запоминаем, что с этим человеком общались
+  if (String(msg.from.id) === String(env.MANAGER_ID)) return;
 
   if (!isNew && !isNight()) return;
   if (await env.REPLIES.get(lastKey)) return; // уже отвечали за последние сутки
