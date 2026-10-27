@@ -106,6 +106,24 @@
   .agent .nm{font-weight:800; font-size:15px}
   .agent .rl{color:var(--fg-muted); font-size:12.5px; margin-top:2px}
   .agent button{flex:none; border:0; border-radius:10px; padding:10px 14px; font:inherit; font-size:13.5px; font-weight:700; cursor:pointer; background:var(--accent); color:var(--accent-ink)}
+  /* блок «Наши услуги» под карточкой риелтора (settings.services в data.js) */
+  .svc[hidden]{display:none}
+  .svc-h{font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:#A8761C; font-weight:700; margin:0 0 8px}
+  .svc-list{display:flex; flex-direction:column; gap:10px; margin-bottom:16px}
+  /* белая плашка в золотой «металлической» рамке */
+  .svc-row{display:flex; align-items:center; gap:12px; width:100%; text-align:left; color:#111; border:2px solid transparent; border-radius:14px; padding:12px; font:inherit; cursor:pointer;
+    background:linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg,#F3D57A,#B8860B 45%,#F7E39A 70%,#A8761C) border-box;
+    box-shadow:0 3px 10px rgba(184,134,11,.22)}
+  .svc-row .ic{flex:none; width:44px; height:44px; border-radius:12px; background:linear-gradient(135deg,#FFF6D9,#F1DC9A); display:flex; align-items:center; justify-content:center; font-size:22px}
+  .svc-row .tx{flex:1; min-width:0}
+  .svc-row .ti{font-weight:800; font-size:14px}
+  .svc-row .sb{font-size:12px; color:#666; margin-top:2px; line-height:1.3}
+  .svc-row .ar{flex:none; color:#B8860B; font-size:22px; font-weight:800}
+  .svc-sheet{display:flex; flex-direction:column; gap:12px}
+  .svc-sheet ul{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px}
+  .svc-sheet li{display:flex; gap:8px; font-size:13.5px; line-height:1.4}
+  .svc-sheet li:before{content:'✓'; color:var(--accent); font-weight:800}
+  .svc-sheet .price{background:var(--accent-soft); color:var(--accent); border-radius:10px; padding:8px 10px; font-size:13px; font-weight:700}
   .home-head .eyebrow{font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); font-weight:700}
   .home-head h1{font-size:clamp(21px, 6.4vw, 26px); margin-top:6px; line-height:1.14; letter-spacing:-0.01em}
   .home-head p{color:var(--fg-muted); font-size:14px; margin-top:8px; line-height:1.5}
@@ -114,8 +132,10 @@
   .points{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px}
   .points[hidden]{display:none}
   .point{
-    background:#fff; color:#111; border-radius:14px; padding:14px 12px;
-    box-shadow:0 1px 3px rgba(0,0,0,.08);
+    /* белая плашка в золотой «металлической» рамке, как у «Наших услуг» */
+    color:#111; border-radius:14px; padding:12px 10px; border:2px solid transparent;
+    background:linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg,#F3D57A,#B8860B 45%,#F7E39A 70%,#A8761C) border-box;
+    box-shadow:0 3px 10px rgba(184,134,11,.22);
     font-size:11.5px; line-height:1.35; font-weight:800;
     text-transform:uppercase; letter-spacing:.03em;
   }
@@ -462,6 +482,7 @@
     <div class="sec-tabs" id="secTabs"></div>
     <div class="home-head">
       <div class="agent" id="agent" hidden></div>
+      <div class="svc" id="services" hidden></div>
       <div class="eyebrow">Калининград · Новостройки</div>
       <h1>Подбор квартир без комиссии</h1>
       <div class="points" id="points" hidden></div>
@@ -1344,6 +1365,24 @@
     else window.open(url, '_blank');
   }
 
+  // окно услуги: описание, пункты, цена и кнопка заявки
+  function openService(it){
+    modalBody.innerHTML = '<div class="svc-sheet">'
+      + '<h3>' + esc((it.icon ? it.icon + ' ' : '') + (it.title || '')) + '</h3>'
+      + (it.text ? '<p>' + esc(it.text) + '</p>' : '')
+      + ((it.list && it.list.length) ? '<ul>' + it.list.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>' : '')
+      + (it.price ? '<div class="price">' + esc(it.price) + '</div>' : '')
+      + '<div class="modal-actions">'
+        + '<button class="btn-ghost" id="svcClose" type="button">Закрыть</button>'
+        + '<button class="btn-primary" id="svcLead" type="button">' + esc(it.button || 'Оставить заявку') + '</button>'
+      + '</div></div>';
+    backdrop.hidden = false;
+    document.getElementById('svcClose').addEventListener('click', closeModal);
+    document.getElementById('svcLead').addEventListener('click', function(){
+      openLeadForm({ name: it.lead || ('услугу «' + (it.title || '') + '»'), room: '' });
+    });
+  }
+
   function openLeadForm(target){
     if (!target){
       var zhk = byId[ctaBar.dataset.zhk];
@@ -1477,6 +1516,27 @@
         openManagerChat('Здравствуйте! Хочу подобрать недвижимость.');
       });
       agentEl.hidden = false;
+    }
+
+    // Блок «Наши услуги» под карточкой риелтора. Нажатие — окно услуги,
+    // из него форма заявки с названием услуги.
+    var S = SETTINGS.services, svcEl = document.getElementById('services');
+    if (S && S.items && S.items.length && svcEl){
+      svcEl.innerHTML = (S.title ? '<div class="svc-h">' + esc(S.title) + '</div>' : '')
+        + '<div class="svc-list"></div>';
+      var svcList = svcEl.querySelector('.svc-list');
+      S.items.forEach(function(it){
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'svc-row';
+        b.innerHTML = '<div class="ic">' + esc(it.icon || '') + '</div>'
+          + '<div class="tx"><div class="ti">' + esc(it.title || '') + '</div>'
+          + (it.short ? '<div class="sb">' + esc(it.short) + '</div>' : '') + '</div>'
+          + '<div class="ar">›</div>';
+        b.addEventListener('click', function(){ openService(it); });
+        svcList.appendChild(b);
+      });
+      svcEl.hidden = false;
     }
   })();
 
