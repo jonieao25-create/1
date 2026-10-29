@@ -769,6 +769,7 @@
     if (!sectionById[sectionId]) sectionId = SECTIONS[0].id;
     currentSection = sectionId;
     var sec = sectionById[sectionId];
+    trackSection(sec);
 
     [].forEach.call(secTabsEl.children, function(b){
       var on = b.getAttribute('data-sec') === sectionId;
@@ -967,6 +968,7 @@
 
   function openDetail(id){
     var c = byId[id];
+    trackView(c);
     if (c.type === 'village') return openVillage(c);
     if (c.type === 'listing') return openListing(c);
     document.getElementById('dTitle').textContent = c.name;
@@ -1703,6 +1705,46 @@
     }
   })();
 
+  // ---------- статистика заходов ----------
+  // Приложение тихо сообщает серверу: открыли, какой раздел, какой ЖК.
+  // Сервер сам проверяет подпись Telegram; сводку риелтор получает командой /stats.
+  // Каждый раздел и ЖК считаем один раз за заход, чтобы не тратить лимит хранилища.
+  // Отправляем по очереди: сервер дописывает одну запись дня, и два запроса
+  // одновременно затёрли бы друг друга.
+  var tracked = {}, statStarted = false, statQueue = null;
+  function track(ev, id, name){
+    var endpoint = SETTINGS && SETTINGS.leadEndpoint;
+    var initData = TG && TG.initData;
+    if (!endpoint || !initData || !window.fetch || !window.Promise) return;
+    var body = JSON.stringify({ initData: initData, ev: ev, id: id || '', name: name || '' });
+    statQueue = (statQueue || Promise.resolve()).then(function(){
+      return fetch(endpoint.replace(/\/$/, '') + '/stat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: body,
+        keepalive: true
+      });
+    }).catch(function(){});
+  }
+  function secName(sec){ return String(sec.tab || sec.title || sec.id).replace(/^[^A-Za-zА-Яа-яЁё0-9]+/, ''); }
+  function trackSection(sec){
+    if (!statStarted || tracked['s:' + sec.id]) return;
+    tracked['s:' + sec.id] = 1;
+    track('section', sec.id, secName(sec));
+  }
+  function trackView(c){
+    if (!c || tracked['c:' + c.id]) return;
+    tracked['c:' + c.id] = 1;
+    track('view', c.id, c.name);
+  }
+  // открытие приложения: какой раздел показан первым
+  function trackOpen(){
+    var sec = sectionById[currentSection];
+    if (sec) tracked['s:' + sec.id] = 1;
+    track('open', sec ? sec.id : '', sec ? secName(sec) : '');
+    statStarted = true;
+  }
+
   // ---------- Telegram Mini App integration ----------
   if (TG){
     TG.ready();
@@ -1723,6 +1765,7 @@
       if (m) start = m[1];
     }
     openStart(start);
+    trackOpen();
   } else {
     // тот же параметр работает и в обычном браузере — удобно для проверки
     var m2 = location.search.match(/[?&]startapp=([A-Za-z0-9_-]+)/);

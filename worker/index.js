@@ -22,6 +22,11 @@
 //   REPLIES     — хранилище KV (Cloudflare → Storage → KV), привязанное к Worker
 //                 под этим именем: бот помнит, кому уже отвечал
 //   BOT_LINK    — ссылка, которую открывает кнопка «Открыть каталог»
+//
+// Четвёртое дело — статистика заходов (адрес /stat). Приложение сообщает,
+// когда человек его открыл, какой раздел и какой ЖК смотрел. Хранится в том же
+// KV REPLIES, по одной записи на день (живёт 40 дней). Команда /stats в боте
+// присылает сводку, отвечает только риелтору (MANAGER_ID). Его заходы не считаем.
 
 const MAX_AGE_SEC = 24 * 60 * 60;
 
@@ -112,6 +117,16 @@ async function handleBotUpdate(update, env) {
   if (!msg || !msg.chat) return;
   const text = msg.text || '';
 
+  if (/^\/stats\b/.test(text) && msg.from && String(msg.from.id) === String(env.MANAGER_ID)) {
+    await tgApi(env, 'sendMessage', {
+      chat_id: msg.chat.id,
+      text: await statsReport(env),
+      parse_mode: 'HTML',
+      disable_web_page_preview: true,
+    });
+    return;
+  }
+
   if (text === CONTACT_BTN) {
     await tgApi(env, 'sendMessage', {
       chat_id: msg.chat.id,
@@ -200,6 +215,145 @@ async function handleBusinessMessage(msg, env) {
   });
 }
 
+// ---------- статистика заходов ----------
+
+const STAT_TTL = 40 * DAY_SEC;
+const MAX_NAMES = 60; // сколько разных ЖК/разделов храним в одном дне
+
+// Дата по Калининграду: 2026-10-29
+function kldDate(ms) {
+  return new Date(ms + TZ_OFFSET * 3600 * 1000).toISOString().slice(0, 10);
+}
+
+function kldTime(ms) {
+  return new Date(ms + TZ_OFFSET * 3600 * 1000).toISOString().slice(11, 16);
+}
+
+// Запись дня: o — открытий; s/c — разделы и ЖК { id: { n: название, k: сколько } };
+// p — люди { id: { n: имя, u: ник, t: время, w: что смотрел последним } }
+async function loadDay(env, date) {
+  const raw = await env.REPLIES.get(`stats:${date}`);
+  try {
+    return raw ? JSON.parse(raw) : { o: 0, s: {}, c: {}, p: {} };
+  } catch {
+    return { o: 0, s: {}, c: {}, p: {} };
+  }
+}
+
+function bump(map, id, name) {
+  if (!map[id] && Object.keys(map).length >= MAX_NAMES) return;
+  const it = map[id] || (map[id] = { n: name, k: 0 });
+  it.n = name || it.n;
+  it.k += 1;
+}
+
+async function handleStat(data, user, env) {
+  if (!env.REPLIES || String(user.id) === String(env.MANAGER_ID)) return;
+  const ev = data.ev;
+  const id = clip(data.id, 40).replace(/[^A-Za-z0-9_-]/g, '');
+  const name = clip(data.name, 80);
+  if (!['open', 'section', 'view'].includes(ev)) return;
+
+  const now = Date.now();
+  const date = kldDate(now);
+  const day = await loadDay(env, date);
+
+  let what = '';
+  if (ev === 'open') day.o += 1;
+  if (id && name && (ev === 'open' || ev === 'section')) {
+    bump(day.s, id, name);
+    what = `раздел «${name}»`;
+  }
+  if (id && name && ev === 'view') {
+    bump(day.c, id, name);
+    what = `смотрел(а) «${name}»`;
+  }
+
+  const p = day.p[user.id] || (day.p[user.id] = {});
+  p.n = clip([user.first_name, user.last_name].filter(Boolean).join(' '), 60);
+  p.u = clip(user.username, 40);
+  p.t = now;
+  if (what) p.w = what;
+
+  await env.REPLIES.put(`stats:${date}`, JSON.stringify(day), { expirationTtl: STAT_TTL });
+}
+
+// 1 открытие, 2 открытия, 5 открытий
+function plural(n, one, few, many) {
+  const a = n % 10, b = n % 100;
+  if (a === 1 && b !== 11) return one;
+  if (a >= 2 && a <= 4 && (b < 12 || b > 14)) return few;
+  return many;
+}
+
+function top(maps, n) {
+  const sum = {};
+  for (const m of maps) {
+    for (const [id, it] of Object.entries(m)) {
+      const s = sum[id] || (sum[id] = { n: it.n, k: 0 });
+      s.k += it.k;
+    }
+  }
+  return Object.values(sum).sort((a, b) => b.k - a.k).slice(0, n);
+}
+
+async function statsReport(env) {
+  if (!env.REPLIES) return 'Статистика не подключена: нет хранилища REPLIES.';
+  const now = Date.now();
+  const days = await Promise.all(
+    [...Array(30).keys()].map((i) => loadDay(env, kldDate(now - i * DAY_SEC * 1000))));
+
+  const period = (n) => {
+    const part = days.slice(0, n);
+    const opens = part.reduce((a, d) => a + d.o, 0);
+    const people = new Set(part.flatMap((d) => Object.keys(d.p))).size;
+    return `${opens} ${plural(opens, 'открытие', 'открытия', 'открытий')} · ${people} ${plural(people, 'человек', 'человека', 'человек')}`;
+  };
+
+  const lines = [
+    '📊 <b>Статистика приложения</b>',
+    '',
+    `Сегодня: ${period(1)}`,
+    `За 7 дней: ${period(7)}`,
+    `За 30 дней: ${period(30)}`,
+  ];
+
+  const complexes = top(days.map((d) => d.c), 5);
+  if (complexes.length) {
+    lines.push('', '🏆 <b>Чаще смотрели (30 дней):</b>');
+    complexes.forEach((it, i) => lines.push(`${i + 1}. ${esc(it.n)} — ${it.k}`));
+  }
+
+  const sections = top(days.map((d) => d.s), 10);
+  if (sections.length) {
+    lines.push('', '📂 Разделы: ' + sections.map((it) => `${esc(it.n)} ${it.k}`).join(' · '));
+  }
+
+  // последние посетители за сегодня и вчера
+  const seen = {};
+  for (const d of days.slice(0, 2)) {
+    for (const [id, p] of Object.entries(d.p)) {
+      if (!seen[id] || seen[id].t < p.t) seen[id] = { ...p, id };
+    }
+  }
+  const recent = Object.values(seen).sort((a, b) => b.t - a.t).slice(0, 5);
+  if (recent.length) {
+    lines.push('', '👤 <b>Последние посетители:</b>');
+    const today = kldDate(now);
+    for (const p of recent) {
+      const name = esc(p.n || 'клиент');
+      const who = p.u ? `${name} (@${esc(p.u)})` : `<a href="tg://user?id=${p.id}">${name}</a>`;
+      const when = (kldDate(p.t) === today ? '' : 'вчера ') + kldTime(p.t);
+      lines.push(`• ${who}, ${when}${p.w ? ', ' + esc(p.w) : ''}`);
+    }
+  }
+
+  if (!days.some((d) => d.o || Object.keys(d.p).length)) {
+    lines.push('', 'Пока заходов нет: счёт идёт с момента включения статистики.');
+  }
+  return lines.join('\n');
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -253,6 +407,16 @@ export default {
 
     const user = await verifyInitData(String(data.initData || ''), env.BOT_TOKEN);
     if (!user) return reply(env, 401, { ok: false });
+
+    // Приложение сообщает о заходе (не заявка)
+    if (url.pathname === '/stat') {
+      try {
+        await handleStat(data, user, env);
+      } catch (e) {
+        // статистика не должна мешать работе приложения
+      }
+      return reply(env, 200, { ok: true });
+    }
 
     const complex = clip(data.complex, 80);
     const room = clip(data.room, 60);
