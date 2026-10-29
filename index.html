@@ -673,6 +673,10 @@
     <div class="l-addr" id="hAddr" hidden></div>
     <div class="quickfacts l-facts" id="hLFacts" hidden></div>
     <div class="l-text" id="hText" hidden></div>
+    <div id="hMapBox" hidden>
+      <h3 class="h-sub">Расположение</h3>
+      <div id="hMap" style="margin-top:10px"></div>
+    </div>
     <div class="l-agent" id="hAgent" hidden></div>
     <div id="hRoomsBox">
       <h3 class="h-sub">Площади помещений</h3>
@@ -1334,6 +1338,10 @@
     tx.innerHTML = (c.text || '').split(/\n\s*\n/).filter(Boolean).map(function(p){ return '<p>' + esc(p) + '</p>'; }).join('');
     tx.hidden = !c.text;
 
+    // карта Яндекса: c.map = {z, points:[{lat, lon}]} в data.js
+    renderMap(document.getElementById('hMap'), c.map);
+    document.getElementById('hMapBox').hidden = !(c.map && c.map.points && c.map.points.length);
+
     // плашка риелтора: фото и только имя (settings.agent в data.js)
     var A = SETTINGS.agent, ag = document.getElementById('hAgent');
     if (A && A.name){
@@ -1362,7 +1370,7 @@
   }
   // у дома в посёлке этих блоков нет
   function hideListingBlocks(){
-    ['hAddr', 'hLFacts', 'hText', 'hAgent'].forEach(function(id){ document.getElementById(id).hidden = true; });
+    ['hAddr', 'hLFacts', 'hText', 'hMapBox', 'hAgent'].forEach(function(id){ document.getElementById(id).hidden = true; });
   }
 
   function backToVillage(){
