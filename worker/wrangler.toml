@@ -6,6 +6,18 @@ compatibility_date = "2026-10-01"
 ALLOWED_ORIGIN = "https://jonieao25-create.github.io"
 APP_URL = "https://jonieao25-create.github.io/1/"
 MANAGER = "Evgeniy_Rieltor_KLD"
+BOT_LINK = "https://t.me/Evgeniy_Rieltor_KLD_bot/novostroy"
+
+# Хранилище ответов бота-секретаря и статистики заходов.
+# ID снят с опубликованного Worker 19.11.2026. Без этой привязки деплой
+# удалит REPLIES, и код упадёт при первом сообщении.
+[[kv_namespaces]]
+binding = "REPLIES"
+id = "a1a77ee46e8146ae841f96c6e1ec1d44"
+
+# Логи Worker'а в Cloudflare. Раньше не были настроены — событий не было.
+[observability]
+enabled = true
 
 # Секреты задаются командами (в файл их не записывать):
 #   npx wrangler secret put BOT_TOKEN
